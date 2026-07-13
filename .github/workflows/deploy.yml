@@ -1,0 +1,129 @@
+name: Deploy to Cloudflare
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:    # 允许手动触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            workers/package-lock.json
+            pages/package-lock.json
+
+      # ===== 后端: Workers + D1 + KV =====
+
+      - name: Install workers deps
+        run: cd workers && npm ci
+
+      - name: Create D1 database (if not exists)
+        id: d1
+        run: |
+          cd workers
+          # 尝试创建,如果已存在会报错但不影响
+          output=$(npx wrangler d1 create freellmapi 2>&1 || true)
+          echo "$output"
+          # 从输出里提取 database_id
+          db_id=$(echo "$output" | grep -oP 'database_id = "\K[^"]+' | head -1 || echo "")
+          if [ -n "$db_id" ]; then
+            echo "D1_ID=$db_id" >> $GITHUB_OUTPUT
+            echo "Created D1: $db_id"
+          else
+            echo "D1 already exists, using env var"
+            echo "D1_ID=${{ secrets.CF_D1_ID }}" >> $GITHUB_OUTPUT
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+
+      - name: Create KV namespace (if not exists)
+        id: kv
+        run: |
+          cd workers
+          output=$(npx wrangler kv namespace create CONFIG 2>&1 || true)
+          echo "$output"
+          kv_id=$(echo "$output" | grep -oP 'id = "\K[^"]+' | head -1 || echo "")
+          if [ -n "$kv_id" ]; then
+            echo "KV_ID=$kv_id" >> $GITHUB_OUTPUT
+            echo "Created KV: $kv_id"
+          else
+            echo "KV already exists, using env var"
+            echo "KV_ID=${{ secrets.CF_KV_ID }}" >> $GITHUB_OUTPUT
+          fi
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+
+      - name: Update wrangler.toml with IDs
+        run: |
+          cd workers
+          # 替换 D1 ID
+          sed -i "s/REPLACE_WITH_D1_ID/${{ steps.d1.outputs.D1_ID }}/g" wrangler.toml
+          # 替换 KV ID
+          sed -i "s/REPLACE_WITH_KV_ID/${{ steps.kv.outputs.KV_ID }}/g" wrangler.toml
+          cat wrangler.toml
+
+      - name: Apply D1 schema
+        run: |
+          cd workers
+          npx wrangler d1 execute freellmapi --file=./schema.sql --remote
+          npx wrangler d1 execute freellmapi --file=./seed-models.sql --remote
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+
+      - name: Set Workers secrets (non-interactive)
+        run: |
+          cd workers
+          # 用 echo 方式传值避免交互
+          echo "${{ secrets.ENCRYPTION_KEY }}" | npx wrangler secret put ENCRYPTION_KEY
+          echo "${{ secrets.JWT_SECRET }}" | npx wrangler secret put JWT_SECRET
+          echo "${{ secrets.ADMIN_BOOTSTRAP_CODE }}" | npx wrangler secret put ADMIN_BOOTSTRAP_CODE
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+
+      - name: Deploy Workers
+        run: |
+          cd workers
+          npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+
+      # ===== 前端: Pages =====
+
+      - name: Install pages deps
+        run: cd pages && npm ci
+
+      - name: Build pages
+        run: cd pages && npm run build
+
+      - name: Deploy Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          projectName: freellmapi-cf-dashboard
+          directory: pages/dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+
+      - name: Summary
+        run: |
+          echo "✅ Deployment complete!"
+          echo "Workers URL: https://freellmapi-cf.${{ secrets.CF_SUBDOMAIN }}.workers.dev"
+          echo "Pages URL:   https://freellmapi-cf-dashboard.pages.dev"
