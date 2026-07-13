@@ -1,8 +1,7 @@
-# 默认模型目录(本地 fallback,远程同步失败时用)
-
-# 简化:通过 wrangler d1 execute 批量执行 seed
-# 实际部署时,首次运行会自动从 freellmapi.co/catalog.json 同步
-# 这里是一些常用模型的本地初始数据
+-- 默认模型目录(本地 fallback,远程同步失败时用)
+-- 简化:通过 wrangler d1 execute 批量执行 seed
+-- 实际部署时,首次运行会自动从 freellmapi.co/catalog.json 同步
+-- 这里是一些常用模型的本地初始数据
 
 INSERT OR IGNORE INTO models (id, platform, model_name, display_name, family, context_window, supports_tools, supports_vision, free_tier_rpm, free_tier_rpd, source) VALUES
   -- Groq

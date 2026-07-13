@@ -4,12 +4,12 @@
  */
 
 import { Hono } from 'hono';
-import type { Env, ChatCompletionRequest, RouteCandidate } from '../types';
-import { requireUserToken } from '../lib/auth';
-import { pickRoute, recordKeyResult, updateStickySession } from '../lib/router';
-import { getProvider } from '../providers';
-import { normalizeSseStream } from '../lib/stream';
-import { err } from '../lib/response';
+import type { Env, ChatCompletionRequest, RouteCandidate } from '../../types';
+import { requireUserToken } from '../../lib/auth';
+import { pickRoute, recordKeyResult, updateStickySession } from '../../lib/router';
+import { getProvider } from '../../providers';
+import { normalizeSseStream } from '../../lib/stream';
+import { err } from '../../lib/response';
 
 export const chatRoute = new Hono<{ Bindings: Env }>();
 

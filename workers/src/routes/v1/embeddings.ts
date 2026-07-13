@@ -3,11 +3,11 @@
  */
 
 import { Hono } from 'hono';
-import type { Env } from '../types';
-import { requireUserToken } from '../lib/auth';
-import { pickRoute, recordKeyResult } from '../lib/router';
-import { getProvider } from '../providers';
-import { err } from '../lib/response';
+import type { Env } from '../../types';
+import { requireUserToken } from '../../lib/auth';
+import { pickRoute, recordKeyResult } from '../../lib/router';
+import { getProvider } from '../../providers';
+import { err } from '../../lib/response';
 
 export const embeddingsRoute = new Hono<{ Bindings: Env }>();
 

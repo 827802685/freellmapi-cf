@@ -7,11 +7,11 @@
  */
 
 import { Hono } from 'hono';
-import type { Env } from '../types';
-import { requireUserToken } from '../lib/auth';
-import { pickRoute, recordKeyResult, updateStickySession } from '../lib/router';
-import { getProvider } from '../providers';
-import { err } from '../lib/response';
+import type { Env } from '../../types';
+import { requireUserToken } from '../../lib/auth';
+import { pickRoute, recordKeyResult, updateStickySession } from '../../lib/router';
+import { getProvider } from '../../providers';
+import { err } from '../../lib/response';
 
 export const messagesRoute = new Hono<{ Bindings: Env }>();
 

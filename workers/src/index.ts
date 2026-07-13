@@ -44,6 +44,42 @@ app.get('/', (c) => c.json({
 
 app.get('/health', (c) => c.json({ ok: true }));
 
+// 诊断端点：检查所有 binding / secret / 关键表是否就绪
+app.get('/__diag', async (c) => {
+  const env = c.env;
+  const out = {
+    bindings: {
+      DB: !!env.DB,
+      CONFIG: !!env.CONFIG,
+      KEY_STATE: !!env.KEY_STATE,
+      SESSION: !!env.SESSION,
+    },
+    secrets: {
+      ENCRYPTION_KEY: !!env.ENCRYPTION_KEY,
+      JWT_SECRET: !!env.JWT_SECRET,
+      ADMIN_BOOTSTRAP_CODE: !!env.ADMIN_BOOTSTRAP_CODE,
+    },
+    vars: {
+      ENVIRONMENT: env.ENVIRONMENT,
+      SESSION_TTL_MINUTES: env.SESSION_TTL_MINUTES,
+      RATE_LIMIT_WINDOW_SECONDS: env.RATE_LIMIT_WINDOW_SECONDS,
+      RATE_LIMIT_MAX_REQUESTS: env.RATE_LIMIT_MAX_REQUESTS,
+    },
+  };
+  // 试着查 D1 关键表
+  try {
+    const counts = {};
+    for (const t of ['accounts','api_keys','models','user_tokens']) {
+      const r = await env.DB.prepare(`SELECT COUNT(*) AS n FROM ${t}`).first();
+      counts[t] = r?.n ?? null;
+    }
+    out.d1 = { ok: true, counts };
+  } catch (e) {
+    out.d1 = { ok: false, error: e.message };
+  }
+  return c.json(out);
+});
+
 // 平台元数据
 app.get('/api/meta/platforms', (c) => {
   return c.json({

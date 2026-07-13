@@ -3,9 +3,9 @@
  */
 
 import { Hono } from 'hono';
-import type { Env } from '../types';
-import { requireUserToken } from '../lib/auth';
-import { err } from '../lib/response';
+import type { Env } from '../../types';
+import { requireUserToken } from '../../lib/auth';
+import { err } from '../../lib/response';
 
 export const audioRoute = new Hono<{ Bindings: Env }>();
 

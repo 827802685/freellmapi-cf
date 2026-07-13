@@ -3,34 +3,16 @@ main = "src/index.ts"
 compatibility_date = "2026-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# 生产环境
-[env.production]
-name = "freellmapi-cf"
-routes = [
-  # 部署后改成你自己的域名
-  # { pattern = "api.yourdomain.com/*", custom_domain = true }
-]
-
 # ---------------- D1 数据库 ----------------
 [[d1_databases]]
 binding = "DB"
 database_name = "freellmapi"
-database_id = "REPLACE_WITH_D1_ID"  # wrangler d1 create freellmapi 后填入
-
-[[d1_databases]]
-binding = "DB"
-database_name = "freellmapi-prod"
-database_id = "REPLACE_WITH_D1_PROD_ID"
+database_id = "da670d36-163c-4821-8835-81bbe34f22b4"
 
 # ---------------- KV 命名空间 ----------------
 [[kv_namespaces]]
 binding = "CONFIG"
-id = "REPLACE_WITH_KV_ID"  # wrangler kv namespace create CONFIG 后填入
-
-[[kv_namespaces]]
-binding = "CONFIG"
-id = "REPLACE_WITH_KV_PROD_ID"
-preview_id = "REPLACE_WITH_KV_ID"
+id = "485e0471ac964d6daf9749e3710aca61"
 
 # ---------------- Durable Objects ----------------
 [[durable_objects.bindings]]
@@ -43,22 +25,18 @@ class_name = "Session"
 
 [[migrations]]
 tag = "v1"
-new_classes = ["KeyState", "Session"]
+new_sqlite_classes = ["KeyState", "Session"]
 
 # ---------------- Cron Triggers ----------------
 [triggers]
 crons = ["0 */12 * * *"]  # 每 12 小时同步一次模型目录
 
-# ---------------- 环境变量（公开） ----------------
+# ---------------- 环境变量 ----------------
 [vars]
-ENVIRONMENT = "development"
+ENVIRONMENT = "production"
 SESSION_TTL_MINUTES = "30"
 RATE_LIMIT_WINDOW_SECONDS = "60"
 RATE_LIMIT_MAX_REQUESTS = "60"
 
 # ---------------- Secrets（敏感） ----------------
-# 用 wrangler secret put 设置：
-#   ENCRYPTION_KEY       (32 字节 hex = 64 字符)
-#   JWT_SECRET           (随机字符串)
-#   ADMIN_BOOTSTRAP_CODE (首次设置密码用的注册码)
-#   CATALOG_SIGNING_KEY  (可选,验证远程目录签名)
+# ENCRYPTION_KEY, JWT_SECRET, ADMIN_BOOTSTRAP_CODE 在 GitHub Actions 里设置

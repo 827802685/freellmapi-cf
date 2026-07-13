@@ -3,8 +3,8 @@
  */
 
 import { Hono } from 'hono';
-import type { Env } from '../types';
-import { requireUserToken } from '../lib/auth';
+import type { Env } from '../../types';
+import { requireUserToken } from '../../lib/auth';
 
 export const modelsRoute = new Hono<{ Bindings: Env }>();
 
