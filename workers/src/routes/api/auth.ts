@@ -44,7 +44,7 @@ authRoute.post('/setup', async (c) => {
 
   const token = await signDashboardSession({ accountId: account!.id, email: account!.email }, c.env.JWT_SECRET);
   setSessionCookie(c, token);
-  return c.json({ ok: true, account });
+  return c.json({ ok: true, account, token });
 });
 
 authRoute.post('/login', async (c) => {
@@ -69,7 +69,7 @@ authRoute.post('/login', async (c) => {
 
   const token = await signDashboardSession({ accountId: account.id, email: account.email }, c.env.JWT_SECRET);
   setSessionCookie(c, token);
-  return c.json({ ok: true, account: { id: account.id, email: account.email } });
+  return c.json({ ok: true, account: { id: account.id, email: account.email }, token });
 });
 
 authRoute.post('/logout', async (c) => {

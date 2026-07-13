@@ -2,7 +2,22 @@
  * API 客户端
  */
 
-const API_BASE = '';
+// 构建时通过 VITE_API_BASE 注入 worker URL。
+// 留空 = 同源(配合 dev proxy 或 Pages 配 Functions/_routes)
+const API_BASE: string =
+  (import.meta.env.VITE_API_BASE as string | undefined)?.replace(/\/+$/, '') || '';
+
+const TOKEN_KEY = 'fl_token';
+
+export function setAuthToken(t: string | null) {
+  if (typeof window === 'undefined') return;
+  if (t) localStorage.setItem(TOKEN_KEY, t);
+  else localStorage.removeItem(TOKEN_KEY);
+}
+export function getAuthToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem(TOKEN_KEY);
+}
 
 export interface ApiKey {
   id: number;
@@ -33,10 +48,12 @@ export interface PlatformInfo {
 }
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
+  const token = getAuthToken();
   const res = await fetch(API_BASE + path, {
-    credentials: 'include',
+    credentials: API_BASE ? 'omit' : 'include',
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(init?.headers || {}),
     },
     ...init,
@@ -52,12 +69,12 @@ export const api = {
   // 认证
   setupStatus: () => req<{ firstRunCompleted: boolean }>('/api/auth/setup-status'),
   setup: (bootstrapCode: string, email: string, password: string) =>
-    req<{ ok: boolean; account: any }>('/api/auth/setup', {
+    req<{ ok: boolean; account: any; token: string }>('/api/auth/setup', {
       method: 'POST',
       body: JSON.stringify({ bootstrapCode, email, password }),
     }),
   login: (email: string, password: string) =>
-    req<{ ok: boolean; account: any }>('/api/auth/login', {
+    req<{ ok: boolean; account: any; token: string }>('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     }),

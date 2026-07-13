@@ -31,6 +31,7 @@ app.use('*', cors({
   credentials: true,
   allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type', 'Authorization', 'X-Session-Id', 'anthropic-version'],
+  exposeHeaders: ['Content-Type'],
 }));
 
 // 健康检查

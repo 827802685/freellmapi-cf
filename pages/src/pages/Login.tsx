@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../lib/auth';
-import { api } from '../lib/api';
+import { api, setAuthToken } from '../lib/api';
 
 export function SetupPage() {
   const { refresh } = useAuth();
@@ -35,7 +35,8 @@ export function SetupPage() {
     }
     setSubmitting(true);
     try {
-      await api.setup(code, email, password);
+      const r = await api.setup(code, email, password);
+      if (r?.token) setAuthToken(r.token);
       await refresh();
     } catch (e: any) {
       setError(e.message);
@@ -136,7 +137,8 @@ export function LoginPage() {
     setSubmitting(true);
     setError('');
     try {
-      await api.login(email, password);
+      const r = await api.login(email, password);
+      if (r?.token) setAuthToken(r.token);
       await refresh();
     } catch (e: any) {
       setError(e.message);

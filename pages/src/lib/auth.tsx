@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext, useContext, ReactNode } from 'react';
-import { api } from './api';
+import { api, setAuthToken, getAuthToken } from './api';
 
 interface AuthState {
   loading: boolean;
@@ -37,7 +37,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    await api.logout();
+    try { await api.logout(); } catch {}
+    setAuthToken(null);
     setState({ loading: false, firstRun: false, authenticated: false, account: null });
   };
 

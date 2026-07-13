@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useAuth } from '../lib/auth';
-import { KeysPage } from './Keys';
-import { TokensPage } from './Tokens';
-import { AnalyticsPage } from './Analytics';
-import { SetupPage, LoginPage } from './Login';
+import { useAuth } from './lib/auth';
+import { KeysPage } from './pages/Keys';
+import { TokensPage } from './pages/Tokens';
+import { AnalyticsPage } from './pages/Analytics';
+import { SetupPage, LoginPage } from './pages/Login';
 
 export default function App() {
   const { state, refresh, logout } = useAuth();
