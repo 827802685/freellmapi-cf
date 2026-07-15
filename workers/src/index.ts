@@ -57,6 +57,48 @@ app.use('*', async (c, next) => {
   await next();
 });
 
+/**
+ * 反向代理:当通过 DASHBOARD_URL 访问时,非 API 路径代理到 Pages 前端。
+ * 这样管理面板和 API 可以共用同一个域名。
+ * /v1/*, /api/*, /health, /__diag 走后端 Worker,其余代理到 Pages。
+ */
+app.use('*', async (c, next) => {
+  const host = c.req.header('Host') || '';
+  const dashboardUrl = (c.env as any).DASHBOARD_URL || '';
+  // 只在 DASHBOARD_URL 的 host 和当前请求 host 一致时触发代理
+  let dashboardHost = '';
+  try {
+    dashboardHost = dashboardUrl ? new URL(dashboardUrl).host : '';
+  } catch { /* ignore */ }
+  if (!dashboardHost || host !== dashboardHost) {
+    return next(); // 不是通过 dashboard 域名访问,正常走后端
+  }
+  const path = new URL(c.req.url).pathname;
+  // API 路径走后端
+  if (path.startsWith('/v1/') || path.startsWith('/api/') || path === '/health' || path === '/__diag' || path === '/favicon.ico') {
+    return next();
+  }
+  // 其他路径代理到 Pages 前端
+  const pagesUrl = `https://freellmapi-cf-dashboard.pages.dev${path}${new URL(c.req.url).search}`;
+  const resp = await fetch(pagesUrl, {
+    method: c.req.method,
+    headers: c.req.raw.headers,
+    body: c.req.method !== 'GET' && c.req.method !== 'HEAD' ? c.req.raw.body : undefined,
+  });
+  // 返回 Pages 的响应,保留状态码和头
+  const newResp = new Response(resp.body, {
+    status: resp.status,
+    statusText: resp.statusText,
+    headers: resp.headers,
+  });
+  // 覆盖 CORS（applyCors 已经在前面执行了,但 fetch 回来的响应可能有自己的 CORS 头）
+  applyCors(c);
+  const hdrs = newResp.headers;
+  hdrs.set('Access-Control-Allow-Origin', c.req.header('Origin') || '*');
+  hdrs.set('Access-Control-Allow-Credentials', 'true');
+  return newResp;
+});
+
 // 根路径 — 浏览器访问则跳转 Dashboard,客户端/curl 返回 JSON 元信息
 app.get('/', (c) => {
   const accept = c.req.header('Accept') || '';
