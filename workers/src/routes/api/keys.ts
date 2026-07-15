@@ -90,8 +90,35 @@ keysRoute.post('/', async (c) => {
     }
   }
 
-  // 异步健康检查(custom 走 baseUrl)
-  c.executionCtx.waitUntil(checkAndUpdateHealth(c.env, result!.id, body.platform, body.key, body.customBaseUrl));
+  // 异步:健康检查 + 模型同步(custom 走 baseUrl)
+  c.executionCtx.waitUntil((async () => {
+    await checkAndUpdateHealth(c.env, result!.id, body.platform, body.key, body.customBaseUrl);
+    // 非 custom 平台:自动拉取上游 /models 同步到 models 表
+    if (body.platform !== 'custom' && !body.customModels) {
+      try {
+        const provider = getProvider(body.platform, body.customBaseUrl);
+        const res = await fetch(provider.baseUrl + '/models', {
+          headers: { 'Authorization': `Bearer ${body.key}` },
+        });
+        if (res.ok) {
+          const data = await res.json() as { data?: { id: string }[] };
+          const remoteModels = (data.data || []).map(m => m.id);
+          const existing = await c.env.DB.prepare(
+            'SELECT model_name FROM models WHERE platform = ?'
+          ).bind(body.platform).all<{ model_name: string }>();
+          const existingSet = new Set((existing.results || []).map(m => m.model_name));
+          for (const modelName of remoteModels) {
+            if (existingSet.has(modelName)) continue;
+            await c.env.DB.prepare(
+              'INSERT OR IGNORE INTO models (id, platform, model_name, enabled) VALUES (?, ?, ?, 1)'
+            ).bind(`${body.platform}:${modelName}`, body.platform, modelName).run();
+          }
+        }
+      } catch (e) {
+        // 模型同步失败不影响 key 添加
+      }
+    }
+  })());
 
   // ⭐ 关键:立刻返回完整 key,UI 才能在弹窗里展示
   return ok(c, {

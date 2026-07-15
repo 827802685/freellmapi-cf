@@ -72,9 +72,10 @@ export function PlaygroundPage() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages.length]);
 
-  // 加载当前账号配了 key 的平台列表(优先显示"我有 key 的")
+  // 加载当前账号配了 key 的平台列表(优先显示"我有 key 的"),仅初始化一次
+  const [providersInitialized, setProvidersInitialized] = useState(false);
   useEffect(() => {
-    if (mode !== 'manual') return;
+    if (mode !== 'manual' || providersInitialized) return;
     api.listKeys()
       .then((j: any) => {
         const myPlatforms: string[] = Array.from(new Set((j.keys || []).map((k: any) => k.platform))) as string[];
@@ -84,12 +85,13 @@ export function PlaygroundPage() {
           ...PROVIDER_PRESETS.map(p => p.value).filter((v: string) => !myPlatforms.includes(v)),
         ].filter((v: string) => presetSet.has(v) || myPlatforms.includes(v));
         setAvailableProviders(ordered);
-        if (ordered.length > 0 && !ordered.includes(provider)) {
-          setProvider(ordered[0]);
+        if (ordered.length > 0) {
+          setProvider(ordered[0]); // 只在首次加载时自动选第一个
         }
+        setProvidersInitialized(true);
       })
       .catch(() => setAvailableProviders(PROVIDER_PRESETS.map(p => p.value)));
-  }, [mode]);
+  }, [mode, providersInitialized]);
 
   // 检测统一 token (每次挂载都重新读)
   const [hasUnifiedToken, setHasUnifiedToken] = useState(true);
@@ -115,12 +117,15 @@ export function PlaygroundPage() {
     })();
   }, [hasUnifiedToken]);
 
-  // 切 provider 时拉模型列表
+  // 切 provider 或 mode 时拉模型列表(所有模式都拉,只是发送时格式不同)
   useEffect(() => {
-    if (mode !== 'manual') return;
+    let cancelled = false; // 防止竞态:provider 切换后旧请求返回时丢弃
     setModelsLoading(true);
+    setModels([]); // 先清空,避免显示上一个 provider 的模型
+    setModel('');
     api.listModels(provider)
       .then(j => {
+        if (cancelled) return; // 已经切到别的 provider 了,丢弃
         const list: ModelInfo[] = (j.models || []).map((m: any) => ({
           id: m.id,
           name: m.model_name || m.name,
@@ -138,12 +143,13 @@ export function PlaygroundPage() {
           activeKeys: m.activeKeys || 0,
         }));
         setModels(list);
-        if (list.length > 0 && !list.find(m => m.name === model)) {
+        if (list.length > 0) {
           setModel(list[0].name);
         }
       })
-      .catch(() => setModels([]))
-      .finally(() => setModelsLoading(false));
+      .catch(() => { if (!cancelled) setModels([]); })
+      .finally(() => { if (!cancelled) setModelsLoading(false); });
+    return () => { cancelled = true; }; // cleanup:下次 effect 运行时标记上一次为 cancelled
   }, [provider, mode]);
 
   const send = async () => {
