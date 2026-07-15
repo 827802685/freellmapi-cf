@@ -39,7 +39,7 @@ embeddingsRoute.post('/embeddings', requireUserToken, async (c) => {
       return err(c, `Model ${body.model} is not an embedding model`, 400, 'invalid_model');
     }
 
-    const provider = getProvider(cand.platform);
+    const provider = getProvider(cand.platform, cand.customBaseUrl || undefined);
     try {
       const res = await fetch(`${provider.baseUrl}/embeddings`, {
         method: 'POST',

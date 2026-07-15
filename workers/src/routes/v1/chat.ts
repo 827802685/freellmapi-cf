@@ -27,13 +27,13 @@ chatRoute.post('/chat/completions', requireUserToken, async (c) => {
   });
 
   if (route.candidates.length === 0) {
-    return err(c, 'No available API key. Add a key on the Keys page or check fallback chain.', 503, 'no_route');
+    return err(c, `No route (candidates=0, enabled keys=${(await c.env.DB.prepare('SELECT COUNT(*) as c FROM api_keys WHERE enabled=1').first<{c:number}>())?.c}). Add key or check fallback chain.`, 503, 'no_route');
   }
 
   // 2) 逐个尝试(fallback 链)
   let lastError: any = null;
   for (const cand of route.candidates) {
-    const provider = getProvider(cand.platform);
+    const provider = getProvider(cand.platform, cand.customBaseUrl || undefined);
     const upstreamReq = provider.transformRequest(req, cand.keyPlaintext, cand.model);
 
     try {

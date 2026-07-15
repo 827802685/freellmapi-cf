@@ -4,7 +4,6 @@
  */
 
 import { Hono } from 'hono';
-import { cors } from 'hono/cors';
 import type { Env } from './types';
 import { chatRoute } from './routes/v1/chat';
 import { modelsRoute as v1ModelsRoute } from './routes/v1/models';
@@ -17,6 +16,8 @@ import { authRoute } from './routes/api/auth';
 import { keysRoute } from './routes/api/keys';
 import { tokensRoute } from './routes/api/tokens';
 import { analyticsRoute } from './routes/api/analytics';
+import { aboutRoute } from './routes/api/about';
+import { settingsRoute } from './routes/api/settings';
 import { modelsRoute, fallbackRoute } from './routes/api/models';
 import { ALL_PLATFORMS, PLATFORM_LABELS } from './providers';
 
@@ -25,23 +26,118 @@ export { Session } from './durable-objects/Session';
 
 const app = new Hono<{ Bindings: Env }>();
 
-// CORS(允许 dashboard 跨域访问)
-app.use('*', cors({
-  origin: (origin) => origin || '*',
-  credentials: true,
-  allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowHeaders: ['Content-Type', 'Authorization', 'X-Session-Id', 'anthropic-version'],
-  exposeHeaders: ['Content-Type'],
-}));
+/**
+ * CORS 响应头
+ * 必须放在最前面,cors() 中间件对 OPTIONS 预检的处理有时过于严格,
+ * 手动包一层更稳。
+ */
+function applyCors(c: any) {
+  const origin = c.req.header('Origin') || '*';
+  c.header('Access-Control-Allow-Origin', origin);
+  c.header('Vary', 'Origin');
+  c.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  c.header(
+    'Access-Control-Allow-Headers',
+    c.req.header('Access-Control-Request-Headers') || 'Content-Type, Authorization, X-Session-Id, anthropic-version'
+  );
+  c.header('Access-Control-Max-Age', '86400');
+  c.header('Access-Control-Expose-Headers', 'Content-Type, Authorization, X-Latency-Ms, X-Platform, X-Model');
+  // ⭐ 关键:浏览器在 fetch({ credentials: 'include' }) 时,服务端必须返回 credentials: true,否则响应被吞,表现为 "Failed to fetch"
+  if (origin !== '*') {
+    c.header('Access-Control-Allow-Credentials', 'true');
+  }
+}
 
-// 健康检查
-app.get('/', (c) => c.json({
-  name: 'freellmapi-cf',
-  version: '0.1.0',
-  status: 'ok',
-  env: c.env.ENVIRONMENT,
-  providers: ALL_PLATFORMS,
-}));
+// CORS(允许 dashboard 跨域访问)
+app.use('*', async (c, next) => {
+  applyCors(c);
+  if (c.req.method === 'OPTIONS') {
+    return c.body(null, 204);
+  }
+  await next();
+});
+
+// 根路径 — 浏览器访问则跳转 Dashboard,客户端/curl 返回 JSON 元信息
+app.get('/', (c) => {
+  const accept = c.req.header('Accept') || '';
+  const isBrowser = accept.includes('text/html');
+  if (!isBrowser) {
+    // API 客户端访问根路径,返回 JSON 元信息
+    return c.json({
+      name: 'freellmapi-cf',
+      version: (c.env as any).APP_VERSION || 'dev',
+      status: 'ok',
+      env: c.env.ENVIRONMENT,
+      providers: ALL_PLATFORMS,
+      docs: {
+        base: '/v1',
+        openai_compatible: true,
+        endpoints: [
+          'POST /v1/chat/completions',
+          'GET  /v1/models',
+          'POST /v1/embeddings',
+          'POST /v1/images/generations',
+          'POST /v1/audio/speech',
+          'POST /v1/responses',
+          'POST /v1/messages  (Anthropic-compatible)',
+        ],
+        dashboard: (c.env as any).DASHBOARD_URL || 'https://freellmapi-cf-dashboard.pages.dev',
+      },
+    });
+  }
+  // 浏览器访问,返回漂亮 HTML 页面
+  const ver = (c.env as any).APP_VERSION || 'dev';
+  const backendUrl = (c.env as any).BACKEND_URL || 'https://your-worker.your-subdomain.workers.dev';
+  const dashboardUrl = (c.env as any).DASHBOARD_URL || 'https://freellmapi-cf-dashboard.pages.dev';
+  const html = `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>freellmapi-cf · Unified LLM Router</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh;display:flex;align-items:center;justify-content:center}
+  .container{max-width:560px;padding:40px 24px;text-align:center}
+  .logo{font-size:2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+  .logo span{color:#38bdf8}
+  .tag{color:#94a3b8;font-size:.95rem;margin-bottom:32px}
+  .card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:24px;margin-bottom:16px;text-align:left}
+  .card h2{font-size:1rem;color:#38bdf8;margin-bottom:12px}
+  .card .row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #1e293b;font-size:.875rem}
+  .card .row:last-child{border-bottom:none}
+  .card .row .k{color:#94a3b8}.card .row .v{color:#e2e8f0;font-family:monospace}
+  .btn{display:inline-block;margin-top:8px;padding:10px 28px;background:#38bdf8;color:#0f172a;text-decoration:none;border-radius:8px;font-weight:600;font-size:.9rem;transition:background .2s}
+  .btn:hover{background:#0ea5e9}
+  .ep{font-family:monospace;font-size:.78rem;color:#38bdf8;background:#0f172a;padding:3px 8px;border-radius:4px;margin-right:8px}
+  .version{margin-top:24px;color:#475569;font-size:.8rem}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">freellmapi<span>-cf</span></div>
+  <div class="tag">Unified LLM Router · 统一大模型 API 路由</div>
+  <div class="card">
+    <h2>API 端点</h2>
+    <div class="row"><span class="k"><span class="ep">POST</span>/v1/chat/completions</span><span class="v">OpenAI 兼容</span></div>
+    <div class="row"><span class="k"><span class="ep">GET</span>/v1/models</span><span class="v">模型列表</span></div>
+    <div class="row"><span class="k"><span class="ep">POST</span>/v1/embeddings</span><span class="v">向量嵌入</span></div>
+    <div class="row"><span class="k"><span class="ep">POST</span>/v1/responses</span><span class="v">Responses API</span></div>
+    <div class="row"><span class="k"><span class="ep">POST</span>/v1/messages</span><span class="v">Anthropic 兼容</span></div>
+  </div>
+  <div class="card">
+    <h2>快速接入</h2>
+    <div class="row"><span class="k">Base URL</span><span class="v">${backendUrl}/v1</span></div>
+    <div class="row"><span class="k">API Key</span><span class="v">freellmapi-xxx</span></div>
+    <div class="row"><span class="k">OpenAI 兼容</span><span class="v">是</span></div>
+  </div>
+  <a href="${dashboardUrl}" class="btn">前往管理面板 →</a>
+  <div class="version">v${ver} · Cloudflare Workers</div>
+</div>
+</body>
+</html>`;
+  return c.html(html);
+});
 
 app.get('/health', (c) => c.json({ ok: true }));
 
@@ -81,6 +177,25 @@ app.get('/__diag', async (c) => {
   return c.json(out);
 });
 
+// CORS 自检：回显浏览器发来的头,并显示服务器实际返回的 CORS 头
+app.get('/__cors', (c) => {
+  return c.json({
+    received: {
+      origin: c.req.header('Origin'),
+      method: c.req.method,
+      host: c.req.header('Host'),
+      referer: c.req.header('Referer'),
+      acrh: c.req.header('Access-Control-Request-Headers'),
+      acrm: c.req.header('Access-Control-Request-Method'),
+    },
+    responded: {
+      acao: c.res.headers.get('Access-Control-Allow-Origin'),
+      vary: c.res.headers.get('Vary'),
+    },
+    url: c.req.url,
+  });
+});
+
 // 平台元数据
 app.get('/api/meta/platforms', (c) => {
   return c.json({
@@ -96,6 +211,8 @@ app.route('/api/auth', authRoute);
 app.route('/api/keys', keysRoute);
 app.route('/api/tokens', tokensRoute);
 app.route('/api/analytics', analyticsRoute);
+app.route('/api/about', aboutRoute);
+app.route('/api/settings', settingsRoute);
 app.route('/api/models', modelsRoute);
 app.route('/api/fallback', fallbackRoute);
 

@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useAuth } from '../lib/auth';
-import { api, setAuthToken } from '../lib/api';
+import { api, setSessionToken } from '../lib/api';
+import { useT } from '../lib/i18n';
 
 export function SetupPage() {
+  const t = useT();
   const { refresh } = useAuth();
   const [step, setStep] = useState<'code' | 'credentials'>('code');
   const [code, setCode] = useState('');
@@ -16,7 +18,7 @@ export function SetupPage() {
     e.preventDefault();
     setError('');
     if (code.length < 4) {
-      setError('请输入启动码');
+      setError(t('setup.code.req'));
       return;
     }
     setStep('credentials');
@@ -26,17 +28,17 @@ export function SetupPage() {
     e.preventDefault();
     setError('');
     if (password.length < 8) {
-      setError('密码至少 8 位');
+      setError(t('setup.password.req'));
       return;
     }
     if (password !== confirm) {
-      setError('两次输入的密码不一致');
+      setError(t('setup.password.mismatch'));
       return;
     }
     setSubmitting(true);
     try {
       const r = await api.setup(code, email, password);
-      if (r?.token) setAuthToken(r.token);
+      if (r?.token) setSessionToken(r.token);
       await refresh();
     } catch (e: any) {
       setError(e.message);
@@ -50,33 +52,33 @@ export function SetupPage() {
       <div className="card max-w-md w-full">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">freellmapi-cf</h1>
-          <p className="text-text-secondary text-sm mt-1">首次设置 - 创建管理员账号</p>
+          <p className="text-text-secondary text-sm mt-1">{t('setup.title')}</p>
         </div>
 
         {step === 'code' ? (
           <form onSubmit={handleCodeSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1.5">启动码</label>
+              <label className="block text-sm font-medium mb-1.5">{t('setup.code')}</label>
               <input
                 type="password"
                 className="input"
-                placeholder="wrangler secret 里的 ADMIN_BOOTSTRAP_CODE"
+                placeholder={t('setup.code.placeholder')}
                 value={code}
                 onChange={e => setCode(e.target.value)}
                 autoFocus
                 required
               />
               <p className="text-xs text-text-muted mt-1.5">
-                防止别人随便注册管理员。启动码在你部署时设置。
+                {t('setup.code.hint')}
               </p>
             </div>
             {error && <div className="text-sm text-danger">{error}</div>}
-            <button type="submit" className="btn-primary w-full">下一步</button>
+            <button type="submit" className="btn-primary w-full">{t('setup.next')}</button>
           </form>
         ) : (
           <form onSubmit={handleFinal} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1.5">邮箱</label>
+              <label className="block text-sm font-medium mb-1.5">{t('setup.email')}</label>
               <input
                 type="email"
                 className="input"
@@ -87,11 +89,11 @@ export function SetupPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5">密码</label>
+              <label className="block text-sm font-medium mb-1.5">{t('setup.password')}</label>
               <input
                 type="password"
                 className="input"
-                placeholder="至少 8 位"
+                placeholder={t('setup.password.placeholder')}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
@@ -99,7 +101,7 @@ export function SetupPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1.5">确认密码</label>
+              <label className="block text-sm font-medium mb-1.5">{t('setup.confirm')}</label>
               <input
                 type="password"
                 className="input"
@@ -112,10 +114,10 @@ export function SetupPage() {
             {error && <div className="text-sm text-danger">{error}</div>}
             <div className="flex gap-2">
               <button type="button" className="btn-secondary flex-1" onClick={() => setStep('code')}>
-                上一步
+                {t('setup.prev')}
               </button>
               <button type="submit" className="btn-primary flex-1" disabled={submitting}>
-                {submitting ? '创建中...' : '创建账号'}
+                {submitting ? t('setup.creating') : t('setup.create')}
               </button>
             </div>
           </form>
@@ -126,6 +128,7 @@ export function SetupPage() {
 }
 
 export function LoginPage() {
+  const t = useT();
   const { refresh } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -138,10 +141,11 @@ export function LoginPage() {
     setError('');
     try {
       const r = await api.login(email, password);
-      if (r?.token) setAuthToken(r.token);
+      // r.token 是 dashboard session(用来调 /api/*);统一 user token 要去密钥页创建
+      if (r?.token) setSessionToken(r.token);
       await refresh();
     } catch (e: any) {
-      setError(e.message);
+      setError(e?.message || String(e));
     } finally {
       setSubmitting(false);
     }
@@ -152,11 +156,11 @@ export function LoginPage() {
       <div className="card max-w-md w-full">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">freellmapi-cf</h1>
-          <p className="text-text-secondary text-sm mt-1">登录管理面板</p>
+          <p className="text-text-secondary text-sm mt-1">{t('login.title')}</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1.5">邮箱</label>
+            <label className="block text-sm font-medium mb-1.5">{t('login.email')}</label>
             <input
               type="email"
               className="input"
@@ -167,7 +171,7 @@ export function LoginPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-1.5">密码</label>
+            <label className="block text-sm font-medium mb-1.5">{t('login.password')}</label>
             <input
               type="password"
               className="input"
@@ -176,9 +180,13 @@ export function LoginPage() {
               required
             />
           </div>
-          {error && <div className="text-sm text-danger">{error}</div>}
+          {error && (
+            <pre className="text-xs text-danger whitespace-pre-wrap break-words rounded p-2 max-h-48 overflow-auto" style={{ backgroundColor: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.2)' }}>
+              {error}
+            </pre>
+          )}
           <button type="submit" className="btn-primary w-full" disabled={submitting}>
-            {submitting ? '登录中...' : '登录'}
+            {submitting ? t('login.submitting') : t('login.submit')}
           </button>
         </form>
       </div>

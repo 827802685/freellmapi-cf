@@ -73,7 +73,7 @@ messagesRoute.post('/messages', requireUserToken, async (c) => {
   }
 
   for (const cand of route.candidates) {
-    const provider = getProvider(cand.platform);
+    const provider = getProvider(cand.platform, cand.customBaseUrl || undefined);
     const upstreamReq = provider.transformRequest(
       {
         ...body,

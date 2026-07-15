@@ -7,12 +7,12 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "freellmapi"
-database_id = "da670d36-163c-4821-8835-81bbe34f22b4"
+database_id = "<your-d1-database-id>"
 
 # ---------------- KV 命名空间 ----------------
 [[kv_namespaces]]
 binding = "CONFIG"
-id = "485e0471ac964d6daf9749e3710aca61"
+id = "<your-kv-namespace-id>"
 
 # ---------------- Durable Objects ----------------
 [[durable_objects.bindings]]
@@ -37,6 +37,9 @@ ENVIRONMENT = "production"
 SESSION_TTL_MINUTES = "30"
 RATE_LIMIT_WINDOW_SECONDS = "60"
 RATE_LIMIT_MAX_REQUESTS = "60"
+APP_VERSION = "2.5.0"
+BACKEND_URL = "<your-backend-url>"
+DASHBOARD_URL = "<your-dashboard-url>"
 
 # ---------------- Secrets（敏感） ----------------
 # ENCRYPTION_KEY, JWT_SECRET, ADMIN_BOOTSTRAP_CODE 在 GitHub Actions 里设置

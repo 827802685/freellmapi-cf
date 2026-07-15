@@ -2,10 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+:root,
+.dark {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-tertiary: #1a1a24;
+  --border-subtle: #1f1f2e;
+  --border-strong: #2a2a3d;
+  --text-primary: #e5e5e7;
+  --text-secondary: #a0a0aa;
+  --text-muted: #6b6b78;
+  --accent-primary: #7c3aed;
+  --accent-hover: #6d28d9;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --on-accent: #ffffff;
+  --selected-text: #0a0a0f;
+  --selected-bg: #e5e5e7;
+}
+
+.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7f7f9;
+  --bg-tertiary: #eeeeef;
+  --border-subtle: #d8d8de;
+  --border-strong: #bcbcc4;
+  --text-primary: #111118;        /* 加深,确保高对比 */
+  --text-secondary: #27272a;      /* 加深: #3f3f46 → #27272a */
+  --text-muted: #52525b;          /* 加深: #6b7280 → #52525b */
+  --accent-primary: #6d28d9;      /* 对白底 7.10:1,通过 AA */
+  --accent-hover: #5b21b6;
+  --success: #047857;            /* 加深: #059669(3.77:1,不达标) → #047857(5.48:1,通过 AA) */
+  --warning: #b45309;            /* 对白底 5.02:1,通过 AA */
+  --danger: #b91c1c;             /* 对白底 6.47:1,通过 AA */
+  --info: #1d4ed8;               /* 新增: 亮色蓝,对白底 6.70:1,通过 AA */
+  --on-accent: #ffffff;
+  --selected-text: #ffffff;
+  --selected-bg: #1c1c1e;
+}
+
 @layer base {
   body {
     @apply antialiased;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
   }
+  html { color-scheme: light dark; }
 }
 
 @layer components {
@@ -13,28 +57,73 @@
     @apply px-4 py-2 rounded-md font-medium text-sm transition-colors;
   }
   .btn-primary {
-    @apply btn bg-accent-primary text-white hover:bg-accent-hover;
+    background-color: var(--accent-primary);
+    color: var(--on-accent);
+    @apply btn hover:opacity-90;
   }
   .btn-secondary {
-    @apply btn bg-bg-tertiary text-text-primary hover:bg-border-strong border border-border-subtle;
-  }
-  .btn-danger {
-    @apply btn bg-danger/10 text-danger hover:bg-danger/20 border border-danger/20;
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    @apply btn hover:opacity-80;
   }
   .btn-ghost {
-    @apply btn text-text-secondary hover:text-text-primary hover:bg-bg-tertiary;
+    color: var(--text-secondary);
+    @apply btn hover:opacity-80;
   }
   .input {
-    @apply w-full px-3 py-2 bg-bg-secondary border border-border-subtle rounded-md text-text-primary placeholder-text-muted focus:outline-none focus:border-accent-primary transition-colors;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    @apply w-full px-3 py-2 rounded-md placeholder-text-muted focus:outline-none transition-colors;
+  }
+  .input:focus {
+    border-color: var(--accent-primary);
   }
   .card {
-    @apply bg-bg-secondary border border-border-subtle rounded-lg p-6;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    @apply rounded-lg p-6;
   }
   .badge {
     @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
   }
-  .badge-healthy { @apply badge bg-success/10 text-success border border-success/20; }
-  .badge-warning { @apply badge bg-warning/10 text-warning border border-warning/20; }
-  .badge-danger { @apply badge bg-danger/10 text-danger border border-danger/20; }
-  .badge-muted { @apply badge bg-bg-tertiary text-text-secondary border border-border-subtle; }
+  .badge-muted { @apply badge; background-color: var(--bg-tertiary); color: var(--text-secondary); border: 1px solid var(--border-subtle); }
+  .badge-healthy { @apply badge text-success; background-color: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); }
+  .badge-warning { @apply badge text-warning; background-color: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2); }
+  .badge-danger { @apply badge text-danger; background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); }
+
+  /* 选中态胶囊按钮:用专门 token 适配两主题 */
+  .chip-selected {
+    background-color: var(--selected-bg);
+    color: var(--selected-text);
+  }
+  .chip-default {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+  }
 }
+
+/* ===== 亮色模式专属修正: badge 背景偏淡/边框偏弱,这里加深以确保文字与边框对比度 (WCAG AA) ===== */
+.light .badge-muted {
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-strong);
+}
+.light .badge-healthy {
+  color: var(--success);
+  background-color: rgba(4, 120, 87, 0.12);
+  border-color: rgba(4, 120, 87, 0.40);
+}
+.light .badge-warning {
+  color: var(--warning);
+  background-color: rgba(180, 83, 9, 0.12);
+  border-color: rgba(180, 83, 9, 0.40);
+}
+.light .badge-danger {
+  color: var(--danger);
+  background-color: rgba(185, 28, 28, 0.10);
+  border-color: rgba(185, 28, 28, 0.40);
+}
+
+/* 亮色模式: 表格 hover 不要用 opacity 变暗文字(会降低对比度),改为浅底高亮 —— 见各 .tsx 已同步替换 */

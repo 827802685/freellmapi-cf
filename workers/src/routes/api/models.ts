@@ -12,15 +12,49 @@ modelsRoute.use('*', requireDashboardAuth);
 
 modelsRoute.get('/', async (c) => {
   const platform = c.req.query('platform');
-  let query = 'SELECT * FROM models';
+  const showAll = c.req.query('all') === '1';
+  // JOIN keys 表以便标记当前该平台是否至少有一把 enabled 的 key
+  let query = `
+    SELECT
+      m.*,
+      (SELECT COUNT(*) FROM api_keys k
+        WHERE k.platform = m.platform AND k.enabled = 1) AS active_keys
+    FROM models m
+  `;
   const params: any[] = [];
+  const conds: string[] = [];
   if (platform) {
-    query += ' WHERE platform = ?';
+    conds.push('m.platform = ?');
     params.push(platform);
   }
-  query += ' ORDER BY platform, model_name';
+  if (!showAll) {
+    conds.push('m.enabled = 1');
+  }
+  if (conds.length > 0) {
+    query += ' WHERE ' + conds.join(' AND ');
+  }
+  query += ' ORDER BY m.platform, m.model_name';
   const rows = await c.env.DB.prepare(query).bind(...params).all();
-  return c.json({ models: rows.results });
+  // camelCase
+  const models = (rows.results || []).map((m: any) => ({
+    id: m.id,
+    name: m.model_name,
+    displayName: m.display_name,
+    platform: m.platform,
+    family: m.family,
+    context: m.context_window,
+    enabled: m.enabled === 1,
+    supportsTools: m.supports_tools === 1,
+    supportsVision: m.supports_vision === 1,
+    freeTier: {
+      rpm: m.free_tier_rpm,
+      rpd: m.free_tier_rpd,
+      tpm: m.free_tier_tpm,
+      tpd: m.free_tier_tpd,
+    },
+    activeKeys: m.active_keys,
+  }));
+  return c.json({ models });
 });
 
 modelsRoute.patch('/:id', async (c) => {

@@ -34,7 +34,6 @@ export async function pickRoute(
     const res = await stub.fetch('https://session/get');
     const { session } = (await res.json()) as { session: any };
     if (session && session.expires_at > Math.floor(Date.now() / 1000)) {
-      // 找到该 platform+model 的候选
       const cands = await buildCandidates(env, session.platform, session.model);
       if (cands.length > 0) {
         return {
@@ -62,7 +61,7 @@ export async function pickRoute(
 
   const candidates: RouteCandidate[] = [];
 
-  for (const entry of chain.rows || []) {
+  for (const entry of chain.results || []) {
     const cands = await buildCandidates(env, entry.platform, entry.model, entry.key_id || undefined);
     candidates.push(...cands);
   }
@@ -70,13 +69,15 @@ export async function pickRoute(
   // 4) 如果没有 fallback_chain,按 key 顺序自动配
   if (candidates.length === 0) {
     const allKeys = await env.DB.prepare(
-      'SELECT * FROM api_keys WHERE enabled = 1'
+      'SELECT id, platform, enabled, health_status, key_ciphertext, key_iv, key_tag, key_hint, custom_base_url, last_checked_at, created_at, updated_at FROM api_keys WHERE enabled = 1'
     ).all<ApiKey>();
-    for (const k of allKeys.rows || []) {
+
+    for (const k of allKeys.results || []) {
       const models = await env.DB.prepare(
         'SELECT model_name FROM models WHERE platform = ? AND enabled = 1'
       ).bind(k.platform).all<{ model_name: string }>();
-      for (const m of models.rows || []) {
+
+      for (const m of models.results || []) {
         const cands = await buildCandidates(env, k.platform, m.model_name, k.id);
         candidates.push(...cands);
       }
@@ -106,21 +107,20 @@ async function buildCandidates(
   let keys: ApiKey[];
   if (pinnedKeyId) {
     const k = await env.DB.prepare(
-      'SELECT * FROM api_keys WHERE id = ? AND enabled = 1'
+      'SELECT id, platform, enabled, health_status, key_ciphertext, key_iv, key_tag, key_hint, custom_base_url, last_checked_at, created_at, updated_at FROM api_keys WHERE id = ? AND enabled = 1'
     ).bind(pinnedKeyId).first<ApiKey>();
     keys = k ? [k] : [];
   } else {
     const result = await env.DB.prepare(
-      'SELECT * FROM api_keys WHERE platform = ? AND enabled = 1 ORDER BY id'
+      'SELECT id, platform, enabled, health_status, key_ciphertext, key_iv, key_tag, key_hint, custom_base_url, last_checked_at, created_at, updated_at FROM api_keys WHERE platform = ? AND enabled = 1 ORDER BY id'
     ).bind(platform).all<ApiKey>();
-    keys = result.rows || [];
+    keys = result.results || [];
   }
 
   const out: RouteCandidate[] = [];
-  const now = Math.floor(Date.now() / 1000);
 
   for (const k of keys) {
-    // 1) 健康检查:冷却中跳过
+    // 1) 健康检查:无效 key 跳过
     if (k.health_status === 'invalid') continue;
 
     // 2) DO 速率检查
@@ -148,8 +148,9 @@ async function buildCandidates(
         model,
         keyId: k.id,
         keyPlaintext: plaintext,
+        customBaseUrl: k.custom_base_url,
       });
-    } catch (e) {
+    } catch {
       // 解密失败,跳过
       continue;
     }

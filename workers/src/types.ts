@@ -46,6 +46,7 @@ export interface ApiKey {
   last_checked_at: number | null;
   created_at: number;
   updated_at: number;
+  custom_base_url?: string | null;
 }
 
 export interface Model {
@@ -141,6 +142,7 @@ export interface RouteCandidate {
   model: string;
   keyId: number;
   keyPlaintext: string;
+  customBaseUrl?: string | null;  // custom 平台需要
 }
 
 // Durable Object 状态

@@ -15,22 +15,37 @@ analyticsRoute.get('/summary', async (c) => {
   const dayAgo = now - 86400;
   const weekAgo = now - 86400 * 7;
 
-  const [total, lastDay, lastWeek, successRate, platformBreakdown, modelBreakdown] = await Promise.all([
+  const [total, lastDay, lastWeek, successRate, platformBreakdown, modelBreakdown, tokenAgg, latencyAgg, trend] = await Promise.all([
     c.env.DB.prepare('SELECT COUNT(*) as c FROM request_logs').first<{ c: number }>(),
     c.env.DB.prepare('SELECT COUNT(*) as c FROM request_logs WHERE created_at >= ?').bind(dayAgo).first<{ c: number }>(),
     c.env.DB.prepare('SELECT COUNT(*) as c FROM request_logs WHERE created_at >= ?').bind(weekAgo).first<{ c: number }>(),
     c.env.DB.prepare('SELECT COUNT(CASE WHEN status_code < 400 THEN 1 END) as s, COUNT(*) as t FROM request_logs WHERE created_at >= ?').bind(weekAgo).first<{ s: number; t: number }>(),
     c.env.DB.prepare('SELECT platform, COUNT(*) as c, AVG(latency_ms) as avg_latency FROM request_logs WHERE created_at >= ? GROUP BY platform ORDER BY c DESC').bind(weekAgo).all(),
     c.env.DB.prepare('SELECT model, platform, COUNT(*) as c FROM request_logs WHERE created_at >= ? GROUP BY model, platform ORDER BY c DESC LIMIT 20').bind(weekAgo).all(),
+    c.env.DB.prepare('SELECT SUM(prompt_tokens) as pin, SUM(completion_tokens) as pout FROM request_logs WHERE created_at >= ?').bind(weekAgo).first<{ pin: number; pout: number }>(),
+    c.env.DB.prepare('SELECT AVG(latency_ms) as a FROM request_logs WHERE created_at >= ? AND latency_ms > 0').bind(weekAgo).first<{ a: number }>(),
+    c.env.DB.prepare(`
+      SELECT strftime('%m-%d', created_at, 'unixepoch') as day, COUNT(*) as c
+      FROM request_logs WHERE created_at >= ?
+      GROUP BY day ORDER BY day
+    `).bind(weekAgo).all(),
   ]);
+
+  // 预估节省:粗算每 1K output token 省 $0.001(非常粗略)
+  const estSave = ((tokenAgg?.pout || 0) / 1000) * 0.001;
 
   return c.json({
     total: total?.c || 0,
     lastDay: lastDay?.c || 0,
     lastWeek: lastWeek?.c || 0,
     successRate: successRate?.t ? successRate.s / successRate.t : 0,
+    totalPromptTokens: tokenAgg?.pin || 0,
+    totalCompletionTokens: tokenAgg?.pout || 0,
+    avgLatency: latencyAgg?.a || 0,
+    estimatedSavings: estSave,
     platformBreakdown: platformBreakdown.results,
     modelBreakdown: modelBreakdown.results,
+    trend: trend.results,
   });
 });
 
