@@ -37,7 +37,7 @@ ENVIRONMENT = "production"
 SESSION_TTL_MINUTES = "30"
 RATE_LIMIT_WINDOW_SECONDS = "60"
 RATE_LIMIT_MAX_REQUESTS = "60"
-APP_VERSION = "2.5.3"
+APP_VERSION = "2.5.4"
 BACKEND_URL = "<your-backend-url>"
 DASHBOARD_URL = "<your-dashboard-url>"
 
