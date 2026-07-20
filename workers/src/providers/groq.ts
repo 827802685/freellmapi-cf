@@ -29,11 +29,15 @@ export class GroqProvider extends BaseProvider {
 
   async healthCheck(apiKey: string) {
     try {
-      const res = await safeFetch(`${this.baseUrl}/models`, {
+      // 用直接 fetch 而非 safeFetch,健康检查只需要状态码不需要 body
+      const res = await fetch(`${this.baseUrl}/models`, {
         method: 'GET',
         headers: { Authorization: `Bearer ${apiKey}` },
       });
-      return { ok: res.status === 200, status: res.status, message: res.status === 200 ? undefined : 'Auth failed' };
+      if (res.status === 200) return { ok: true, status: 200 };
+      if (res.status === 401 || res.status === 403) return { ok: false, status: res.status, message: 'Invalid key' };
+      if (res.status === 429) return { ok: false, status: 429, message: 'Rate limited' };
+      return { ok: false, status: res.status, message: `Error (${res.status})` };
     } catch (e: any) {
       return { ok: false, status: 0, message: e.message };
     }

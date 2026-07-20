@@ -228,6 +228,13 @@ function PlatformCard({
             <span className="badge-danger">{t('settings.provider.noKey')}</span>
           )}
           <button
+            className="btn-ghost text-xs px-2 py-1"
+            onClick={onReload}
+            title={t('settings.refresh')}
+          >
+            🔄
+          </button>
+          <button
             className="btn-ghost text-xs px-2 py-1 text-danger"
             onClick={deleteProvider}
             disabled={deleting}

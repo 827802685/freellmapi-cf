@@ -19,11 +19,13 @@ chatRoute.post('/chat/completions', requireUserToken, async (c) => {
 
   // 1) 选路
   const sessionId = c.req.header('X-Session-Id') || null;
+  const routeMode = (c.req.header('X-Route-Mode') || 'auto') as 'auto' | 'fastest' | 'smartest' | 'fusion' | 'manual';
   const userToken = c.get('userToken' as any);
   const route = await pickRoute(c.env, {
     userTokenId: userToken.id,
     sessionId,
     prefersModel: req.model,
+    routeMode,
   });
 
   if (route.candidates.length === 0) {

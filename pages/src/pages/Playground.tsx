@@ -171,12 +171,13 @@ export function PlaygroundPage() {
       const token = localStorage.getItem('fl_token');
       // auto 模式让后端自动选,manual 模式发 provider:model 格式
       const requestModel = mode === 'manual' ? `${provider}:${model}` : 'auto';
-      console.log('[freellmapi] request URL:', FULL_URL, 'token:', token ? token.slice(0, 20) + '...' : 'NONE');
+      console.log('[freellmapi] request URL:', FULL_URL, 'token:', token ? token.slice(0, 20) + '...' : 'NONE', 'mode:', mode);
       const r = await fetch(FULL_URL, {
         method: 'POST',
         signal: ac.signal,
         headers: {
           'Content-Type': 'application/json',
+          'X-Route-Mode': mode, // 传递路由策略给后端
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({ model: requestModel, stream, max_tokens: maxTokens, messages: newMsgs }),

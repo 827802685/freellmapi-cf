@@ -10,12 +10,15 @@ import { decrypt } from './crypto';
 import { getKeyStateStub } from '../durable-objects/KeyState';
 import { getSessionStub } from '../durable-objects/Session';
 
+export type RouteMode = 'auto' | 'fastest' | 'smartest' | 'fusion' | 'manual';
+
 export interface RouterContext {
   userTokenId: number;
   sessionId: string | null;
   estimatedTokens?: number;
   prefersPlatform?: string;
   prefersModel?: string;
+  routeMode?: RouteMode;  // 路由策略
 }
 
 export interface RouteResult {
@@ -84,7 +87,66 @@ export async function pickRoute(
     }
   }
 
+  // 5) 按路由策略排序候选(非 manual 模式)
+  const mode = ctx.routeMode || 'auto';
+  if (mode !== 'manual' && candidates.length > 1) {
+    await sortCandidatesByMode(env, candidates, mode);
+  }
+
   return { candidates };
+}
+
+/**
+ * 按路由策略排序候选
+ * - auto/fusion: 保持 fallback chain 顺序
+ * - fastest: 按平台平均延迟排序(低延迟优先)
+ * - smartest: 按模型能力排序(大模型优先)
+ */
+async function sortCandidatesByMode(env: Env, candidates: RouteCandidate[], mode: RouteMode) {
+  if (mode === 'auto' || mode === 'fusion') {
+    return; // 保持原序
+  }
+
+  if (mode === 'fastest') {
+    // 查最近 24h 各平台平均延迟
+    const dayAgo = Math.floor(Date.now() / 1000) - 86400;
+    const rows = await env.DB.prepare(
+      'SELECT platform, AVG(latency_ms) as avg_lat FROM request_logs WHERE created_at >= ? AND latency_ms > 0 AND status_code >= 200 AND status_code < 300 GROUP BY platform'
+    ).bind(dayAgo).all<{ platform: string; avg_lat: number }>();
+    const latencyMap = new Map<string, number>();
+    for (const r of rows.results || []) {
+      latencyMap.set(r.platform, r.avg_lat);
+    }
+    // 有延迟数据的排前面(按延迟升序),没数据的排后面
+    candidates.sort((a, b) => {
+      const la = latencyMap.get(a.platform) ?? 999999;
+      const lb = latencyMap.get(b.platform) ?? 999999;
+      return la - lb;
+    });
+    return;
+  }
+
+  if (mode === 'smartest') {
+    // 按模型名里的参数量排序(70b > 32b > 8b > 3b > flash > mini)
+    const sizeScore = (model: string): number => {
+      const m = model.toLowerCase();
+      // 提取数字+b 参数量
+      const match = m.match(/(\d+(?:\.\d+)?)\s*b/);
+      if (match) return parseFloat(match[1]);
+      // 特殊关键词
+      if (m.includes('120b') || m.includes('3120b')) return 120;
+      if (m.includes('70b')) return 70;
+      if (m.includes('32b') || m.includes('30b') || m.includes('26b') || m.includes('24b')) return 30;
+      if (m.includes('8b')) return 8;
+      if (m.includes('3b')) return 3;
+      if (m.includes('1b')) return 1;
+      if (m.includes('flash') || m.includes('mini') || m.includes('nano')) return 0.5;
+      if (m.includes('micro')) return 0.3;
+      return 1; // 默认
+    };
+    candidates.sort((a, b) => sizeScore(b.model) - sizeScore(a.model));
+    return;
+  }
 }
 
 function parseModelId(modelId: string): [string | null, string | null] {

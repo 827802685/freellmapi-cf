@@ -50,8 +50,9 @@ export class AihordeProvider extends BaseProvider {
 
   async healthCheck(_apiKey: string) {
     try {
-      const res = await safeFetch(`${this.baseUrl}/status`, { method: 'GET' });
-      return { ok: res.status === 200, status: res.status };
+      const res = await fetch(`${this.baseUrl}/status`, { method: 'GET' });
+      if (res.status === 200) return { ok: true, status: 200 };
+      return { ok: false, status: res.status, message: `Error (${res.status})` };
     } catch (e: any) {
       return { ok: false, status: 0, message: e.message };
     }

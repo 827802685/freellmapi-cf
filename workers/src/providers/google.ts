@@ -79,8 +79,11 @@ export class GoogleProvider extends BaseProvider {
 
   async healthCheck(apiKey: string) {
     try {
-      const res = await safeFetch(`${this.baseUrl}/models?key=${apiKey}`, { method: 'GET' });
-      return { ok: res.status === 200, status: res.status };
+      const res = await fetch(`${this.baseUrl}/models?key=${apiKey}`, { method: 'GET' });
+      if (res.status === 200) return { ok: true, status: 200 };
+      if (res.status === 401 || res.status === 403) return { ok: false, status: res.status, message: 'Invalid key' };
+      if (res.status === 429) return { ok: false, status: 429, message: 'Rate limited' };
+      return { ok: false, status: res.status, message: `Error (${res.status})` };
     } catch (e: any) {
       return { ok: false, status: 0, message: e.message };
     }

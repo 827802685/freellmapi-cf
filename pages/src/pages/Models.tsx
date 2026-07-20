@@ -109,7 +109,7 @@ export function ModelsPage() {
         </div>
       </div>
 
-      {/* 搜索 + 计数 */}
+      {/* 搜索 + 计数 + 刷新 */}
       <div className="flex gap-2 items-center">
         <input
           className="input flex-1"
@@ -122,6 +122,9 @@ export function ModelsPage() {
             {t('models.search.reset')}
           </button>
         )}
+        <button className="btn-ghost text-sm" onClick={reload} disabled={loading}>
+          {loading ? t('common.loading') : t('settings.refresh')}
+        </button>
         <span className="text-xs text-text-muted whitespace-nowrap">
           {filtered.length} / {models.length}
         </span>

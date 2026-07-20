@@ -45,6 +45,8 @@ export function KeysPage() {
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [keysLoading, setKeysLoading] = useState(true);
   const [showList, setShowList] = useState(true);
+  const [checkingAll, setCheckingAll] = useState(false);
+  const [checkProgress, setCheckProgress] = useState('');
 
   const loadTokens = async () => {
     setLoading(true);
@@ -70,6 +72,24 @@ export function KeysPage() {
     loadKeys();
   }, []);
 
+  // 按顺序刷新所有密钥健康状态
+  const checkAllKeys = async () => {
+    if (checkingAll || keys.length === 0) return;
+    setCheckingAll(true);
+    for (let i = 0; i < keys.length; i++) {
+      const k = keys[i];
+      setCheckProgress(t('keys.list.check.progress', { current: i + 1, total: keys.length, platform: k.platform }));
+      try {
+        await api.checkKey(k.id);
+      } catch { /* 忽略单个失败,继续下一个 */ }
+      // 每个检查完后刷新列表,让用户看到实时状态
+      if (i < keys.length - 1) await loadKeys();
+    }
+    await loadKeys(); // 最后再刷新一次
+    setCheckingAll(false);
+    setCheckProgress('');
+  };
+
   return (
     <div className="space-y-6">
       {/* ===== 卡片 1: 统一 API 密钥 ===== */}
@@ -90,10 +110,23 @@ export function KeysPage() {
             <h2 className="text-base font-semibold">{t('keys.list.count', { n: keys.length })}</h2>
             <p className="text-xs text-text-muted mt-0.5">{t('keys.list.desc')}</p>
           </div>
-          <button className="btn-ghost text-xs" onClick={() => setShowList(v => !v)}>
-            {showList ? t('keys.list.collapse') : t('keys.list.expand')}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              className="btn-ghost text-xs"
+              onClick={checkAllKeys}
+              disabled={checkingAll || keys.length === 0}
+              title={t('keys.list.check.all')}
+            >
+              {checkingAll ? t('keys.list.checking') : `🔄 ${t('keys.list.check.all')}`}
+            </button>
+            <button className="btn-ghost text-xs" onClick={() => setShowList(v => !v)}>
+              {showList ? t('keys.list.collapse') : t('keys.list.expand')}
+            </button>
+          </div>
         </div>
+        {checkingAll && checkProgress && (
+          <div className="text-xs text-text-muted mb-2 animate-pulse">{checkProgress}</div>
+        )}
         {showList && (
           keysLoading ? (
             <div className="text-center py-6 text-text-secondary text-sm">{t('common.loading')}</div>
@@ -410,10 +443,15 @@ function AddProviderKeyCard({ onAdded }: { onAdded: () => void }) {
               <label className="block text-xs text-text-muted mb-1">{t('keys.add.key')}</label>
               <input
                 className="input text-sm font-mono w-full"
-                placeholder={t('keys.add.key.placeholder.alt')}
+                placeholder={platform === 'cloudflare' ? t('keys.add.key.placeholder.cloudflare') : t('keys.add.key.placeholder.alt')}
                 value={key}
                 onChange={e => setKey(e.target.value)}
               />
+              {platform === 'cloudflare' && (
+                <div className="text-xs text-text-muted mt-1">
+                  {t('keys.add.key.hint.cloudflare')}
+                </div>
+              )}
             </div>
             <div className="md:col-span-3">
               <label className="block text-xs text-text-muted mb-1">{t('keys.add.label')}</label>
@@ -694,7 +732,6 @@ function KeyRowInline({ apiKey, onChange }: { apiKey: ApiKey; onChange: () => vo
         </td>
         <td className="py-2 px-2 text-right">
           <button className="btn-ghost text-xs p-1" onClick={reveal} disabled={busy} title={t('keys.action.show.short')}>{revealing ? '🙈' : '👁'}</button>
-          <button className="btn-ghost text-xs p-1" onClick={syncModels} disabled={busy} title={t('keys.action.sync')}>📥</button>
           <button className="btn-ghost text-xs p-1" onClick={check} disabled={busy} title={t('keys.action.check')}>🔄</button>
           <button className="btn-ghost text-xs p-1" onClick={remove} title={t('keys.action.delete')}>🗑</button>
         </td>
