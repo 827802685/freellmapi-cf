@@ -31,8 +31,35 @@ analyticsRoute.get('/summary', async (c) => {
     `).bind(weekAgo).all(),
   ]);
 
-  // 预估节省:粗算每 1K output token 省 $0.001(非常粗略)
-  const estSave = ((tokenAgg?.pout || 0) / 1000) * 0.001;
+  // 预估节省:按平台/模型的参考定价计算(与付费 API 相比的节省)
+  // 参考价格: input $/1M tokens, output $/1M tokens
+  const PRICING: Record<string, { input: number; output: number }> = {
+    // 大模型贵一些
+    'openai': { input: 2.5, output: 10 },        // GPT-4o
+    'anthropic': { input: 3, output: 15 },        // Claude 3.5
+    'google': { input: 1.25, output: 5 },         // Gemini Pro
+    'groq': { input: 0.59, output: 0.79 },        // Groq 参考价
+    'zai': { input: 0.5, output: 0.5 },           // 智谱
+    'github': { input: 0, output: 0 },            // 免费
+    'cloudflare': { input: 0, output: 0 },        // 免费
+    'nvidia': { input: 0, output: 0 },            // 免费
+    'cerebras': { input: 0, output: 0 },          // 免费
+    'sambanova': { input: 0, output: 0 },         // 免费
+    'aihorde': { input: 0, output: 0 },           // 免费
+  };
+
+  // 按平台分组计算 token 节省
+  const platformTokens = await c.env.DB.prepare(
+    'SELECT platform, SUM(prompt_tokens) as pin, SUM(completion_tokens) as pout FROM request_logs WHERE created_at >= ? AND status_code < 400 GROUP BY platform'
+  ).bind(weekAgo).all<{ platform: string; pin: number; pout: number }>();
+
+  let estSave = 0;
+  for (const row of platformTokens.results || []) {
+    const price = PRICING[row.platform] || { input: 1, output: 3 }; // 默认参考价
+    const inputCost = ((row.pin || 0) / 1_000_000) * price.input;
+    const outputCost = ((row.pout || 0) / 1_000_000) * price.output;
+    estSave += inputCost + outputCost;
+  }
 
   return c.json({
     total: total?.c || 0,

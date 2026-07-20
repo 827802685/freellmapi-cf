@@ -18,7 +18,7 @@ type Tab = 'models' | 'playground' | 'keys' | 'analytics' | 'settings' | 'about'
 export default function App() {
   const t = useT();
   const { state, refresh, logout } = useAuth();
-  const [tab, setTab] = useState<Tab>('keys');
+  const [tab, setTab] = useState<Tab>('models');
   const [appVersion, setAppVersion] = useState('...');
 
   // 运行时从后端读取版本号(唯一源头: wrangler.toml APP_VERSION)

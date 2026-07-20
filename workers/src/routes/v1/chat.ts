@@ -52,19 +52,22 @@ chatRoute.post('/chat/completions', requireUserToken, async (c) => {
         // 成功
         if (req.stream) {
           const idGen = () => `chatcmpl-${Date.now()}`;
+          const streamStart = start;
+          // 流结束时记录 usage(如果上游提供了的话)
           const stream = normalizeSseStream(
             upstreamRes.body!,
             cand.platform,
             cand.model,
-            idGen
+            idGen,
+            (usage) => {
+              c.executionCtx.waitUntil(
+                logRequest(c.env, userToken.id, cand, upstreamRes.status, Date.now() - streamStart, true, 0, usage)
+              );
+            }
           );
           // 写 sticky session
           c.executionCtx.waitUntil(
             updateStickySession(c.env, sessionId, cand.platform, cand.model)
-          );
-          // 写 analytics(异步)
-          c.executionCtx.waitUntil(
-            logRequest(c.env, userToken.id, cand, upstreamRes.status, Date.now() - start, req.stream, 0)
           );
           return new Response(stream, {
             status: 200,
@@ -87,13 +90,19 @@ chatRoute.post('/chat/completions', requireUserToken, async (c) => {
           return c.json(normalized);
         }
       } else {
-        // 上游错误,继续下一个
+        // 上游错误,记录日志后继续下一个候选
         const errBody = await upstreamRes.text();
         lastError = { status: upstreamRes.status, body: errBody, platform: cand.platform, model: cand.model };
+        c.executionCtx.waitUntil(
+          logRequest(c.env, userToken.id, cand, upstreamRes.status, Date.now() - start, false, 0)
+        );
         continue;
       }
     } catch (e: any) {
       lastError = { status: 0, message: e.message, platform: cand.platform, model: cand.model };
+      c.executionCtx.waitUntil(
+        logRequest(c.env, userToken.id, cand, 0, Date.now() - start, false, 0)
+      );
       continue;
     }
   }

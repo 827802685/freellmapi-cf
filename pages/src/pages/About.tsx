@@ -12,6 +12,14 @@ interface ChangelogEntry {
 
 const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '2.6.1',
+    date: '2026-07-20',
+    changes: {
+      zh: ['修复分析页成功率:失败请求现在也记入 request_logs', '修复预估节省:流式请求现在提取 usage token', '预估节省按平台/模型参考定价计算(不再为0)', '登录后默认进入模型页而非密钥页'],
+      en: ['Fixed analytics success rate: failed requests now logged to request_logs', 'Fixed estimated savings: streaming requests now extract usage tokens', 'Estimated savings calculated by platform/model pricing (no longer 0)', 'Default page after login changed from Keys to Models'],
+    },
+  },
+  {
     version: '2.6.0',
     date: '2026-07-20',
     changes: {

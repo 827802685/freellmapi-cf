@@ -21,7 +21,8 @@ export function normalizeSseStream(
   upstream: ReadableStream<Uint8Array>,
   platform: string,
   model: string,
-  idGen: () => string
+  idGen: () => string,
+  onUsage?: (usage: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number }) => void
 ): ReadableStream<Uint8Array> {
   const reader = upstream.getReader();
   const decoder = new TextDecoder();
@@ -30,12 +31,17 @@ export function normalizeSseStream(
   let buffer = '';
   const id = idGen();
   const created = Math.floor(Date.now() / 1000);
+  let lastUsage: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number } | null = null;
 
   return new ReadableStream<Uint8Array>({
     async pull(controller) {
       try {
         const { value, done } = await reader.read();
         if (done) {
+          // 流结束,如果有 usage 则回调
+          if (lastUsage && onUsage) {
+            try { onUsage(lastUsage); } catch { /* ignore */ }
+          }
           // 发最后的 [DONE] 标记
           controller.enqueue(encoder.encode('data: [DONE]\n\n'));
           controller.close();
@@ -57,6 +63,14 @@ export function normalizeSseStream(
 
           try {
             const upstreamData = JSON.parse(payload);
+            // 提取 usage(很多上游在最后一个 chunk 带上 usage)
+            if (upstreamData.usage) {
+              lastUsage = {
+                prompt_tokens: upstreamData.usage.prompt_tokens,
+                completion_tokens: upstreamData.usage.completion_tokens,
+                total_tokens: upstreamData.usage.total_tokens,
+              };
+            }
             const normalized = normalizeSseChunk(upstreamData, platform, model, id, created);
             if (normalized) {
               controller.enqueue(encoder.encode(`data: ${JSON.stringify(normalized)}\n\n`));
