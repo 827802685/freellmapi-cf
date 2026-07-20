@@ -10,121 +10,6 @@ interface ChangelogEntry {
   changes: { zh: string[]; en: string[] };
 }
 
-const CHANGELOG: ChangelogEntry[] = [
-  {
-    version: '2.6.1',
-    date: '2026-07-20',
-    changes: {
-      zh: ['修复分析页成功率:失败请求现在也记入 request_logs', '修复预估节省:流式请求现在提取 usage token', '预估节省按平台/模型参考定价计算(不再为0)', '登录后默认进入模型页而非密钥页'],
-      en: ['Fixed analytics success rate: failed requests now logged to request_logs', 'Fixed estimated savings: streaming requests now extract usage tokens', 'Estimated savings calculated by platform/model pricing (no longer 0)', 'Default page after login changed from Keys to Models'],
-    },
-  },
-  {
-    version: '2.6.0',
-    date: '2026-07-20',
-    changes: {
-      zh: ['路由策略真正生效: fastest 按延迟排序, smartest 按模型大小排序', '前端通过 X-Route-Mode 头传递路由模式', '修复非 manual 模式全发 model=auto 的问题', '密钥页加全部刷新按钮(按顺序检查)'],
-      en: ['Routing strategies now work: fastest sorts by latency, smartest sorts by model size', 'Frontend sends route mode via X-Route-Mode header', 'Fixed all non-manual modes sending model=auto', 'Added Check All button to Keys page'],
-    },
-  },
-  {
-    version: '2.5.7',
-    date: '2026-07-16',
-    changes: {
-      zh: ['Cloudflare key 格式改为逗号分隔 (ACCOUNT_ID,API_TOKEN)', '设置页提供商卡片加刷新按钮', '关于页加版本日志'],
-      en: ['Cloudflare key format changed to comma-separated (ACCOUNT_ID,API_TOKEN)', 'Added refresh button to provider cards in Settings', 'Added changelog to About page'],
-    },
-  },
-  {
-    version: '2.5.6',
-    date: '2026-07-16',
-    changes: {
-      zh: ['修复健康检查误判(safeFetch超时问题)', '所有 Provider 健康检查改用直接 fetch', '智谱状态恢复正常'],
-      en: ['Fixed health check false positives (safeFetch timeout)', 'All provider health checks now use direct fetch', 'ZAI status restored to healthy'],
-    },
-  },
-  {
-    version: '2.5.5',
-    date: '2026-07-15',
-    changes: {
-      zh: ['Worker 反向代理: 0426 域名同时服务前端和 API', '管理面板可通过 api.zjkl0426.dpdns.org 访问'],
-      en: ['Worker reverse proxy: 0426 domain serves both frontend and API', 'Dashboard accessible via api.zjkl0426.dpdns.org'],
-    },
-  },
-  {
-    version: '2.5.4',
-    date: '2026-07-15',
-    changes: {
-      zh: ['DASHBOARD_URL 更新为 0426 域名', 'BACKEND_URL 保持 0330 不变'],
-      en: ['DASHBOARD_URL updated to 0426 domain', 'BACKEND_URL remains at 0330'],
-    },
-  },
-  {
-    version: '2.5.3',
-    date: '2026-07-15',
-    changes: {
-      zh: ['修复试玩台模型列表竞态条件', '添加 key 时自动同步模型', 'NVIDIA 模型同步成功 (117 个模型)'],
-      en: ['Fixed playground model list race condition', 'Auto sync models on key add', 'NVIDIA models synced successfully (117 models)'],
-    },
-  },
-  {
-    version: '2.5.2',
-    date: '2026-07-15',
-    changes: {
-      zh: ['修复试玩台非手动模式模型列表不刷新', '修复 provider 切换后旧模型残留'],
-      en: ['Fixed playground model list not refreshing in non-manual mode', 'Fixed stale models after switching provider'],
-    },
-  },
-  {
-    version: '2.5.0',
-    date: '2026-07-15',
-    changes: {
-      zh: ['亮色模式全面修复 (WCAG AA 标准)', 'i18n 英文翻译补全 (130+ 新 key)', '开源到 GitHub'],
-      en: ['Light mode fully fixed (WCAG AA standard)', 'i18n English translations completed (130+ new keys)', 'Open sourced on GitHub'],
-    },
-  },
-  {
-    version: '2.4.2',
-    date: '2026-07-14',
-    changes: {
-      zh: ['分析页折叠/展开功能', '版本号不一致修复'],
-      en: ['Analytics page collapse/expand', 'Fixed version number inconsistency'],
-    },
-  },
-  {
-    version: '2.4.0',
-    date: '2026-07-13',
-    changes: {
-      zh: ['自定义提供商密钥支持', '动态提供商管理(添加/删除)', '批量额度设置'],
-      en: ['Custom provider key support', 'Dynamic provider management (add/delete)', 'Batch rate limit settings'],
-    },
-  },
-  {
-    version: '2.2.0',
-    date: '2026-07-10',
-    changes: {
-      zh: ['Responses API 支持', '图像生成 API', 'TTS 语音合成', '试玩台路由模式'],
-      en: ['Responses API support', 'Image generation API', 'TTS audio synthesis', 'Playground routing modes'],
-    },
-  },
-  {
-    version: '2.0.0',
-    date: '2026-07-05',
-    changes: {
-      zh: ['完整重写到 Cloudflare Workers', '初始 18 个 LLM 提供商', 'AES-256-GCM 密钥加密', '管理面板 (React + Tailwind)'],
-      en: ['Complete rewrite to Cloudflare Workers', 'Initial 18 LLM providers', 'AES-256-GCM key encryption', 'Dashboard (React + Tailwind)'],
-    },
-  },
-  {
-    version: '1.0.0',
-    date: '2026-07-01',
-    changes: {
-      zh: ['项目立项'],
-      en: ['Project initial release'],
-    },
-  },
-];
-
 interface AboutInfo {
   name: string;
   version: string;
@@ -144,6 +29,7 @@ interface AboutInfo {
   platforms: { platform: string; total: number; enabled: number }[];
   endpoints: Record<string, string>;
   docs: { openai_compatible: boolean; auth: string };
+  changelog?: ChangelogEntry[];
 }
 
 function formatUptime(ms: number, t: TFn): string {
@@ -291,11 +177,12 @@ export function AboutPage() {
             </div>
           </div>
 
-          {/* 版本日志 */}
+          {/* 版本日志 (从后端 /api/about 动态获取) */}
+          {info.changelog && info.changelog.length > 0 && (
           <div className="card">
             <h2 className="text-base font-semibold mb-4">{t('about.changelog')}</h2>
             <div className="space-y-4">
-              {CHANGELOG.map((entry, i) => (
+              {info.changelog.map((entry, i) => (
                 <div key={entry.version} className={i === 0 ? '' : 'pt-4 border-t border-border-subtle'}>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="font-mono font-semibold text-sm" style={{ color: 'var(--accent-primary)' }}>v{entry.version}</span>
@@ -314,6 +201,7 @@ export function AboutPage() {
               ))}
             </div>
           </div>
+          )}
 
           <div className="text-center text-xs text-text-muted pt-2">
             {info.name} v{info.version} · {info.description}

@@ -29,9 +29,9 @@
   --bg-tertiary: #eeeeef;
   --border-subtle: #d8d8de;
   --border-strong: #bcbcc4;
-  --text-primary: #111118;        /* 加深,确保高对比 */
-  --text-secondary: #27272a;      /* 加深: #3f3f46 → #27272a */
-  --text-muted: #52525b;          /* 加深: #6b7280 → #52525b */
+  --text-primary: #0a0a0f;          /* 再加深: #111118 → #0a0a0f */
+  --text-secondary: #1a1a20;        /* 再加深: #27272a → #1a1a20 */
+  --text-muted: #3f3f46;            /* 再加深: #52525b → #3f3f46 */
   --accent-primary: #6d28d9;      /* 对白底 7.10:1,通过 AA */
   --accent-hover: #5b21b6;
   --success: #047857;            /* 加深: #059669(3.77:1,不达标) → #047857(5.48:1,通过 AA) */
