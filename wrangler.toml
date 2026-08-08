@@ -1,0 +1,29 @@
+name = "freellmapi-cf"
+main = "src/index.ts"
+compatibility_date = "2026-06-20"
+
+[assets]
+directory = "./src/dashboard"
+not_found_handling = "single-page-application"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "freellmapi-db"
+database_id = ""
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = ""
+
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "freellmapi-media"
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+[vars]
+ENCRYPTION_KEY = "freellmapi-cf-encryption-key-2024"
+JWT_SECRET = "freellmapi-cf-jwt-secret-2024-secure"
+CATALOG_URL = "https://freellmapi.co/api/catalog"
+SITE_TITLE = "freellmapi-cf"

@@ -1,0 +1,17 @@
+{
+  "name": "freellmapi-cf",
+  "version": "2.5.7",
+  "description": "FreeLLMAPI - Cloudflare Workers deployment",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute freellmapi-db --file=schema.sql",
+    "db:remote": "wrangler d1 execute freellmapi-db --remote --file=schema.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240601.0",
+    "typescript": "^5.5.0",
+    "wrangler": "^3.60.0"
+  }
+}
