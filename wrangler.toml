@@ -1,6 +1,7 @@
 name = "freellmapi-cf"
 main = "src/index.ts"
 compatibility_date = "2026-06-20"
+account_id = "de9cc5da9705c7edf34e7e4e0ac9e360"
 
 [assets]
 directory = "./src/dashboard"
@@ -9,15 +10,11 @@ not_found_handling = "single-page-application"
 [[d1_databases]]
 binding = "DB"
 database_name = "freellmapi-db"
-database_id = ""
+database_id = "15b75f57-9114-4fa6-be0d-f063bb2ed499"
 
 [[kv_namespaces]]
 binding = "CACHE"
-id = ""
-
-[[r2_buckets]]
-binding = "MEDIA"
-bucket_name = "freellmapi-media"
+id = "a66b7659a5e44f5e901c208686d40029"
 
 [triggers]
 crons = ["*/5 * * * *"]
