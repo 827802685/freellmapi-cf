@@ -5,8 +5,7 @@
   "scripts": {
     "deploy": "wrangler deploy",
     "dev": "wrangler dev",
-    "db:init": "wrangler d1 execute DB --file=./schema.sql",
-    "db:seed": "wrangler d1 execute DB --command=\"INSERT INTO users (email, password_hash, role) VALUES ('admin@freellmapi.com', '\$2b\$10\$8K1p/a0dL1LXMIgoEDFrwOfMQkfLA/Vz0RvFYXJ7MJfHkGJyVqF6q', 'admin');\""
+    "db:init": "wrangler d1 execute DB --file=./schema.sql"
   },
   "dependencies": {}
 }
