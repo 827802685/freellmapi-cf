@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeLLM API - 管理面板</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg-primary: #0f0f13;
+      --bg-secondary: #1a1a23;
+      --bg-card: #22222e;
+      --bg-hover: #2a2a38;
+      --border: #333344;
+      --text-primary: #e8e8ed;
+      --text-secondary: #9999aa;
+      --text-muted: #666677;
+      --accent: #10b981;
+      --accent-hover: #059669;
+      --accent-dim: rgba(16, 185, 129, 0.1);
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --radius: 8px;
+      --radius-lg: 12px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    html { font-size: 14px; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+    input, select, textarea, button {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    /* ===== Login Page ===== */
+    #login-page {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    .login-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: var(--shadow);
+    }
+    .login-card h1 {
+      font-size: 1.75rem;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+    .login-card .subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus {
+      border-color: var(--accent);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 1.25rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+      gap: 0.4rem;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+    .btn-sm {
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+    .btn-outline:hover {
+      background: var(--bg-hover);
+    }
+    .btn-block {
+      width: 100%;
+    }
+    .login-error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--danger);
+      color: var(--danger);
+      padding: 0.6rem 0.9rem;
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    /* ===== Dashboard Layout ===== */
+    #dashboard-page {
+      display: none;
+      min-height: 100vh;
+    }
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 240px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      padding: 1.25rem 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+    .sidebar-brand {
+      padding: 0 1.25rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.75rem;
+    }
+    .sidebar-brand h2 {
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+    .sidebar-brand small {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 0.5rem;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+      font-size: 0.9rem;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .nav-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    .nav-item.active {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+    .nav-item .icon {
+      width: 20px;
+      text-align: center;
+      font-size: 1rem;
+    }
+    .sidebar-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+    .sidebar-footer .user-info {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .sidebar-footer .logout-btn {
+      font-size: 0.8rem;
+      color: var(--danger);
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+    .sidebar-footer .logout-btn:hover {
+      text-decoration: underline;
+    }
+
+    .main-content {
+      margin-left: 240px;
+      padding: 1.5rem 2rem;
+      min-height: 100vh;
+    }
+
+    /* ===== Pages ===== */
+    .page { display: none; }
+    .page.active { display: block; }
+    .page-header {
+      margin-bottom: 1.5rem;
+    }
+    .page-header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .page-header p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    /* ===== Cards ===== */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+    }
+    .stat-card .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat-card .stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
+    }
+    .stat-card .stat-value.green { color: var(--accent); }
+    .stat-card .stat-value.blue { color: var(--info); }
+    .stat-card .stat-value.yellow { color: var(--warning); }
+    .stat-card .stat-value.red { color: var(--danger); }
+
+    /* ===== Tables ===== */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 0.65rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+    th {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    td {
+      color: var(--text-primary);
+    }
+    tr:hover td {
+      background: var(--bg-hover);
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .badge-active { background: rgba(16, 185, 129, 0.15); color: var(--accent); }
+    .badge-inactive { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+    .badge-info { background: rgba(59, 130, 246, 0.15); color: var(--info); }
+
+    /* ===== Modal ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.show { display: flex; }
+    .modal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal h2 {
+      margin-bottom: 1rem;
+      font-size: 1.15rem;
+    }
+    .modal .form-group {
+      margin-bottom: 1rem;
+    }
+    .modal .form-group input, .modal .form-group select, .modal .form-group textarea {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      outline: none;
+    }
+    .modal .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .modal .form-group select {
+      cursor: pointer;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      margin-top: 1.25rem;
+    }
+
+    /* ===== Playground ===== */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 500px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      background: var(--bg-primary);
+    }
+    .chat-message {
+      margin-bottom: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      max-width: 85%;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .chat-message.user {
+      background: var(--accent-dim);
+      color: var(--accent);
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-message.assistant {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border-bottom-left-radius: 4px;
+    }
+    .chat-message.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+    .chat-input-area {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+    }
+    .chat-input-area textarea {
+      flex: 1;
+      padding: 0.6rem 0.8rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      resize: none;
+      outline: none;
+      min-height: 40px;
+      max-height: 120px;
+    }
+    .chat-input-area textarea:focus {
+      border-color: var(--accent);
+    }
+    .chat-input-area .chat-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .chat-input-area select {
+      padding: 0.4rem;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+    }
+
+    /* ===== Toast ===== */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .toast {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+      box-shadow: var(--shadow);
+      animation: slideIn 0.3s ease;
+      max-width: 350px;
+    }
+    .toast.success { background: var(--accent); color: #fff; }
+    .toast.error { background: var(--danger); color: #fff; }
+    .toast.info { background: var(--info); color: #fff; }
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* ===== Loading ===== */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      .sidebar { width: 60px; }
+      .sidebar-brand h2, .sidebar-brand small, .nav-item span, .sidebar-footer .user-info { display: none; }
+      .sidebar-nav { padding: 0 0.25rem; }
+      .nav-item { justify-content: center; padding: 0.6rem; }
+      .main-content { margin-left: 60px; padding: 1rem; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ===== Scrollbar ===== */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+<!-- ==================== Toast Container ==================== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ==================== Login Page ==================== -->
+<div id="login-page">
+  <div class="login-card">
+    <h1>FreeLLM API</h1>
+    <p class="subtitle">管理面板登录</p>
+    <div class="login-error" id="loginError"></div>
+    <form id="loginForm" onsubmit="return handleLogin(event)">
+      <div class="form-group">
+        <label for="email">邮箱</label>
+        <input type="email" id="email" placeholder="admin@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label for="password">密码</label>
+        <input type="password" id="password" placeholder="请输入密码" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="loginBtn">登录</button>
+    </form>
+  </div>
+</div>
+
+<!-- ==================== Dashboard Page ==================== -->
+<div id="dashboard-page">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h2>FreeLLM</h2>
+      <small>管理面板</small>
+    </div>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="page-stats" onclick="switchPage('page-stats')">
+        <span class="icon">&#9632;</span>
+        <span>概览</span>
+      </button>
+      <button class="nav-item" data-page="page-models" onclick="switchPage('page-models')">
+        <span class="icon">&#9670;</span>
+        <span>模型管理</span>
+      </button>
+      <button class="nav-item" data-page="page-keys" onclick="switchPage('page-keys')">
+        <span class="icon">&#9679;</span>
+        <span>API 密钥</span>
+      </button>
+      <button class="nav-item" data-page="page-provider-keys" onclick="switchPage('page-provider-keys')">
+        <span class="icon">&#9641;</span>
+        <span>提供商密钥</span>
+      </button>
+      <button class="nav-item" data-page="page-analytics" onclick="switchPage('page-analytics')">
+        <span class="icon">&#9673;</span>
+        <span>分析</span>
+      </button>
+      <button class="nav-item" data-page="page-settings" onclick="switchPage('page-settings')">
+        <span class="icon">&#9881;</span>
+        <span>设置</span>
+      </button>
+      <button class="nav-item" data-page="page-playground" onclick="switchPage('page-playground')">
+        <span class="icon">&#9654;</span>
+        <span>试玩台</span>
+      </button>
+      <button class="nav-item" data-page="page-about" onclick="switchPage('page-about')">
+        <span class="icon">&#9432;</span>
+        <span>关于</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-info" id="userInfo">加载中...</div>
+      <button class="logout-btn" onclick="handleLogout()">退出登录</button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- ===== Stats Page ===== -->
+    <div class="page active" id="page-stats">
+      <div class="page-header">
+        <h1>概览</h1>
+        <p>系统运行状态和统计数据</p>
+      </div>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="stat-label">24h 请求数</div><div class="stat-value green" id="statRequests">-</div></div>
+        <div class="stat-card"><div class="stat-label">24h Token 数</div><div class="stat-value blue" id="statTokens">-</div></div>
+        <div class="stat-card"><div class="stat-label">活跃密钥</div><div class="stat-value yellow" id="statActiveKeys">-</div></div>
+        <div class="stat-card"><div class="stat-label">活跃提供商</div><div class="stat-value" id="statActiveProviders">-</div></div>
+        <div class="stat-card"><div class="stat-label">模型总数</div><div class="stat-value blue" id="statTotalModels">-</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">按模型请求分布</span>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>模型</th><th>请求数</th></tr></thead>
+            <tbody id="statsModelBody"><tr><td colspan="2" style="color:var(--text-muted)">加载中...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">最近错误</span>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>时间</th><th>模型</th><th>状态</th></tr></thead>
+            <tbody id="statsErrorsBody"><tr><td colspan="3" style="color:var(--text-muted)">加载中...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Models Page ===== -->
+    <div class="page" id="page-models">
+      <div class="page-header">
+        <h1>模型管理</h1>
+        <p>管理可用的 AI 模型</p>
+      </div>
+      <div class="card">
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>模型 ID</th><th>显示名称</th><th>提供商</th><th>上下文长度</th><th>状态</th><th>操作</th></tr></thead>
+            <tbody id="modelsBody"><tr><td colspan="6" style="color:var(--text-muted)">加载中...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Keys Page ===== -->
+    <div class="page" id="page-keys">
+      <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <h1>API 密钥</h1>
+          <p>管理用户 API 访问密钥</p>
+        </div>
+        <button class="btn btn-primary" onclick="showCreateKeyModal()">+ 创建密钥</button>
+      </div>
+      <div class="card">
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>名称</th><th>密钥前缀</th><th>速率限制</th><th>状态</th><th>创建时间</th><th>过期时间</th><th>操作</th></tr></thead>
+            <tbody id="keysBody"><tr><td colspan="7" style="color:var(--text-muted)">加载中...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Provider Keys Page ===== -->
+    <div class="page" id="page-provider-keys">
+      <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <h1>提供商密钥</h1>
+          <p>管理上游 AI 提供商的 API 密钥</p>
+        </div>
+        <button class="btn btn-primary" onclick="showCreateProviderKeyModal()">+ 添加密钥</button>
+      </div>
+      <div class="card">
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>提供商</th><th>密钥前缀</th><th>优先级</th><th>使用次数</th><th>状态</th><th>操作</th></tr></thead>
+            <tbody id="providerKeysBody"><tr><td colspan="6" style="color:var(--text-muted)">加载中...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Analytics Page ===== -->
+    <div class="page" id="page-analytics">
+      <div class="page-header" style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <h1>分析</h1>
+          <p>请求日志和使用分析</p>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <select id="analyticsModelFilter" onchange="loadAnalytics()" style="padding:0.4rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);">
+            <option value="">所有模型</option>
+          </select>
+          <select id="analyticsStatusFilter" onchange="loadAnalytics()" style="padding:0.4rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);">
+            <option value="">所有状态</option>
+            <option value="success">成功</option>
+            <option value="error">错误</option>
+          </select>
+        </div>
+      </div>
+      <div class="card">
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>时间</th><th>模型</th><th>提供商</th><th>耗时(ms)</th><th>Token 数</th><th>状态</th></tr></thead>
+            <tbody id="analyticsBody"><tr><td colspan="6" style="color:var(--text-muted)">加载中...</td></tr></tbody>
+          </table>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:1rem;font-size:0.85rem;">
+          <span style="color:var(--text-muted)" id="analyticsInfo">第 0 页，共 0 条</span>
+          <div style="display:flex;gap:0.5rem;">
+            <button class="btn btn-sm btn-outline" id="prevAnalyticsPage" onclick="changeAnalyticsPage(-1)">上一页</button>
+            <button class="btn btn-sm btn-outline" id="nextAnalyticsPage" onclick="changeAnalyticsPage(1)">下一页</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Settings Page ===== -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <h1>设置</h1>
+        <p>系统配置管理</p>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">通用设置</span></div>
+        <div id="settingsForm">
+          <div class="form-group">
+            <label>速率限制 (每分钟请求数)</label>
+            <input type="number" id="setting_rate_limit" placeholder="60">
+          </div>
+          <div class="form-group">
+            <label>会话过期时间 (小时)</label>
+            <input type="number" id="setting_session_expiry" placeholder="24">
+          </div>
+          <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Playground Page ===== -->
+    <div class="page" id="page-playground">
+      <div class="page-header">
+        <h1>试玩台</h1>
+        <p>在线测试 AI 模型</p>
+      </div>
+      <div class="card">
+        <div class="card-header" style="display:flex;gap:1rem;align-items:center;">
+          <span class="card-title">聊天</span>
+          <select id="playgroundModel" style="padding:0.4rem;background:var(--bg-primary);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-size:0.85rem;">
+            <option value="">选择模型...</option>
+          </select>
+          <button class="btn btn-sm btn-outline" onclick="clearPlayground()">清空对话</button>
+        </div>
+        <div class="chat-container">
+          <div class="chat-messages" id="playgroundMessages">
+            <div class="chat-message assistant">欢迎使用 AI 试玩台！选择一个模型并开始对话。</div>
+          </div>
+          <div class="chat-input-area">
+            <textarea id="playgroundInput" placeholder="输入消息..." rows="2" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendPlaygroundMessage();}"></textarea>
+            <div class="chat-controls">
+              <button class="btn btn-primary btn-sm" onclick="sendPlaygroundMessage()" id="playgroundSendBtn">发送</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== About Page ===== -->
+    <div class="page" id="page-about">
+      <div class="page-header">
+        <h1>关于</h1>
+      </div>
+      <div class="card">
+        <h3>FreeLLM API</h3>
+        <p style="color:var(--text-secondary);margin:0.5rem 0 1rem;">一个统一的 AI 模型 API 代理，支持多种 AI 提供商。</p>
+        <table style="width:auto;">
+          <tr><td style="border:none;color:var(--text-muted);padding-right:2rem;">版本</td><td style="border:none;">1.0.0</td></tr>
+          <tr><td style="border:none;color:var(--text-muted);padding-right:2rem;">运行时</td><td style="border:none;">Cloudflare Workers</td></tr>
+          <tr><td style="border:none;color:var(--text-muted);padding-right:2rem;">数据库</td><td style="border:none;">D1</td></tr>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ==================== Create Key Modal ==================== -->
+<div class="modal-overlay" id="createKeyModal">
+  <div class="modal">
+    <h2>创建 API 密钥</h2>
+    <div class="form-group">
+      <label>密钥名称</label>
+      <input type="text" id="newKeyName" placeholder="例如: 开发环境">
+    </div>
+    <div class="form-group">
+      <label>速率限制 (每分钟)</label>
+      <input type="number" id="newKeyRateLimit" value="60" min="1">
+    </div>
+    <div class="form-group">
+      <label>过期时间 (可选)</label>
+      <input type="datetime-local" id="newKeyExpires">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('createKeyModal')">取消</button>
+      <button class="btn btn-primary" onclick="createApiKey()">创建</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Create Provider Key Modal ==================== -->
+<div class="modal-overlay" id="createProviderKeyModal">
+  <div class="modal">
+    <h2>添加提供商密钥</h2>
+    <div class="form-group">
+      <label>提供商</label>
+      <select id="newProviderKeyProvider">
+        <option value="openai">OpenAI</option>
+        <option value="anthropic">Anthropic</option>
+        <option value="google">Google Gemini</option>
+        <option value="deepseek">DeepSeek</option>
+        <option value="groq">Groq</option>
+        <option value="togetherai">Together AI</option>
+        <option value="openrouter">OpenRouter</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>API 密钥</label>
+      <input type="password" id="newProviderKeyValue" placeholder="sk-...">
+    </div>
+    <div class="form-group">
+      <label>自定义 Base URL (可选)</label>
+      <input type="text" id="newProviderKeyBaseUrl" placeholder="https://...">
+    </div>
+    <div class="form-group">
+      <label>优先级 (数字越小越优先)</label>
+      <input type="number" id="newProviderKeyPriority" value="0">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal('createProviderKeyModal')">取消</button>
+      <button class="btn btn-primary" onclick="createProviderKey()">添加</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== Show Key Result Modal ==================== -->
+<div class="modal-overlay" id="showKeyModal">
+  <div class="modal">
+    <h2>密钥已创建</h2>
+    <p style="color:var(--warning);margin-bottom:1rem;font-size:0.9rem;">请立即复制此密钥，关闭后将无法再次查看。</p>
+    <div class="form-group">
+      <label>密钥</label>
+      <textarea id="newKeyPlaintext" readonly style="background:var(--bg-primary);border:1px solid var(--accent);color:var(--accent);padding:0.6rem;width:100%;border-radius:var(--radius);font-family:monospace;min-height:50px;"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="copyKey()">复制</button>
+      <button class="btn btn-outline" onclick="closeModal('showKeyModal')">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== State =====
+let authToken = localStorage.getItem('auth_token');
+let analyticsPage = 1;
+const PAGE_SIZE = 20;
+
+// ===== Toast =====
+function showToast(msg, type = 'success') {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + type;
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
+// ===== API Helper =====
+async function apiFetch(path, options = {}) {
+  const headers = { 'Content-Type': 'application/json', ...options.headers };
+  if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
+  const res = await fetch(path, { ...options, headers });
+  const data = await res.json();
+  if (!res.ok && !data.success) throw new Error(data.error || '请求失败');
+  return data;
+}
+
+// ===== Login =====
+async function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const btn = document.getElementById('loginBtn');
+  const errorEl = document.getElementById('loginError');
+
+  btn.disabled = true;
+  btn.textContent = '登录中...';
+  errorEl.style.display = 'none';
+
+  try {
+    const res = await apiFetch('/api/admin/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+      headers: {}, // no auth header for login
+    });
+    // Re-fetch without auth header
+    const loginRes = await fetch('/api/admin/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    const loginData = await loginRes.json();
+    if (!loginData.success) throw new Error(loginData.error);
+
+    authToken = loginData.data.token;
+    localStorage.setItem('auth_token', authToken);
+    showDashboard();
+    showToast('登录成功');
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '登录';
+  }
+}
+
+function handleLogout() {
+  authToken = null;
+  localStorage.removeItem('auth_token');
+  document.getElementById('dashboard-page').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+  showToast('已退出登录');
+}
+
+// ===== Dashboard =====
+function showDashboard() {
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('dashboard-page').style.display = 'flex';
+  document.getElementById('userInfo').textContent = '管理员';
+  loadStats();
+  loadModels();
+  loadKeys();
+  loadProviderKeys();
+  loadAnalytics();
+  loadPlaygroundModels();
+}
+
+function switchPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  document.querySelector(`[data-page="${pageId}"]`).classList.add('active');
+
+  if (pageId === 'page-stats') loadStats();
+  if (pageId === 'page-models') loadModels();
+  if (pageId === 'page-keys') loadKeys();
+  if (pageId === 'page-provider-keys') loadProviderKeys();
+  if (pageId === 'page-analytics') loadAnalytics();
+  if (pageId === 'page-playground') loadPlaygroundModels();
+}
+
+// ===== Modal =====
+function showModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+// ===== Stats =====
+async function loadStats() {
+  try {
+    const res = await apiFetch('/api/admin/stats');
+    const s = res.data;
+    document.getElementById('statRequests').textContent = s.total_requests_24h.toLocaleString();
+    document.getElementById('statTokens').textContent = s.total_tokens_24h.toLocaleString();
+    document.getElementById('statActiveKeys').textContent = s.active_keys;
+    document.getElementById('statActiveProviders').textContent = s.active_providers;
+    document.getElementById('statTotalModels').textContent = s.total_models;
+
+    // By model
+    const modelBody = document.getElementById('statsModelBody');
+    if (s.requests_by_model.length === 0) {
+      modelBody.innerHTML = '<tr><td colspan="2" style="color:var(--text-muted)">暂无数据</td></tr>';
+    } else {
+      modelBody.innerHTML = s.requests_by_model.map(m =>
+        `<tr><td>${m.model}</td><td>${m.count}</td></tr>`
+      ).join('');
+    }
+
+    // Errors
+    const errorsBody = document.getElementById('statsErrorsBody');
+    if (s.recent_errors.length === 0) {
+      errorsBody.innerHTML = '<tr><td colspan="3" style="color:var(--text-muted)">暂无错误</td></tr>';
+    } else {
+      errorsBody.innerHTML = s.recent_errors.map(e =>
+        `<tr><td>${new Date(e.timestamp).toLocaleString()}</td><td>${e.model}</td><td><span class="badge badge-inactive">${e.status}</span></td></tr>`
+      ).join('');
+    }
+  } catch (err) {
+    showToast('加载统计数据失败: ' + err.message, 'error');
+  }
+}
+
+// ===== Models =====
+async function loadModels() {
+  try {
+    const res = await apiFetch('/api/admin/models');
+    const body = document.getElementById('modelsBody');
+    if (res.data.length === 0) {
+      body.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted)">暂无数据</td></tr>';
+      return;
+    }
+    body.innerHTML = res.data.map(m => `
+      <tr>
+        <td><code>${m.model_id}</code></td>
+        <td>${m.display_name || '-'}</td>
+        <td>${m.provider}</td>
+        <td>${m.context_length}</td>
+        <td><span class="badge ${m.is_active ? 'badge-active' : 'badge-inactive'}">${m.is_active ? '启用' : '禁用'}</span></td>
+        <td>
+          <button class="btn btn-sm ${m.is_active ? 'btn-danger' : 'btn-primary'}" onclick="toggleModel('${m.model_id}', ${m.is_active})">
+            ${m.is_active ? '禁用' : '启用'}
+          </button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    showToast('加载模型列表失败: ' + err.message, 'error');
+  }
+}
+
+async function toggleModel(modelId, currentActive) {
+  try {
+    await apiFetch('/api/admin/models/' + encodeURIComponent(modelId), {
+      method: 'PATCH',
+      body: JSON.stringify({ is_active: currentActive ? 0 : 1 }),
+    });
+    showToast('模型状态已更新');
+    loadModels();
+  } catch (err) {
+    showToast('更新失败: ' + err.message, 'error');
+  }
+}
+
+// ===== Keys =====
+async function loadKeys() {
+  try {
+    const res = await apiFetch('/api/admin/keys');
+    const body = document.getElementById('keysBody');
+    if (res.data.length === 0) {
+      body.innerHTML = '<tr><td colspan="7" style="color:var(--text-muted)">暂无数据</td></tr>';
+      return;
+    }
+    body.innerHTML = res.data.map(k => `
+      <tr>
+        <td>${k.name}</td>
+        <td><code>${k.key_prefix}...</code></td>
+        <td>${k.rate_limit}/min</td>
+        <td><span class="badge ${k.is_active ? 'badge-active' : 'badge-inactive'}">${k.is_active ? '启用' : '禁用'}</span></td>
+        <td>${new Date(k.created_at).toLocaleDateString()}</td>
+        <td>${k.expires_at ? new Date(k.expires_at).toLocaleDateString() : '永不过期'}</td>
+        <td>
+          <button class="btn btn-sm ${k.is_active ? 'btn-danger' : 'btn-primary'}" onclick="toggleKey(${k.id}, ${k.is_active})">
+            ${k.is_active ? '禁用' : '启用'}
+          </button>
+          <button class="btn btn-sm btn-danger" onclick="deleteKey(${k.id})">删除</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    showToast('加载密钥失败: ' + err.message, 'error');
+  }
+}
+
+function showCreateKeyModal() {
+  document.getElementById('newKeyName').value = '';
+  document.getElementById('newKeyRateLimit').value = '60';
+  document.getElementById('newKeyExpires').value = '';
+  showModal('createKeyModal');
+}
+
+async function createApiKey() {
+  const name = document.getElementById('newKeyName').value;
+  const rateLimit = parseInt(document.getElementById('newKeyRateLimit').value) || 60;
+  const expires = document.getElementById('newKeyExpires').value;
+
+  if (!name) { showToast('请输入密钥名称', 'error'); return; }
+
+  try {
+    const res = await apiFetch('/api/admin/keys', {
+      method: 'POST',
+      body: JSON.stringify({ name, rate_limit: rateLimit, expires_at: expires || null }),
+    });
+    closeModal('createKeyModal');
+    document.getElementById('newKeyPlaintext').value = res.data.plaintext_key;
+    showModal('showKeyModal');
+    loadKeys();
+  } catch (err) {
+    showToast('创建失败: ' + err.message, 'error');
+  }
+}
+
+function copyKey() {
+  const textarea = document.getElementById('newKeyPlaintext');
+  textarea.select();
+  navigator.clipboard.writeText(textarea.value).then(() => {
+    showToast('已复制到剪贴板');
+  }).catch(() => {
+    document.execCommand('copy');
+    showToast('已复制');
+  });
+}
+
+async function toggleKey(id, currentActive) {
+  try {
+    await apiFetch('/api/admin/keys/' + id, {
+      method: 'PATCH',
+      body: JSON.stringify({ is_active: currentActive ? 0 : 1 }),
+    });
+    showToast('密钥状态已更新');
+    loadKeys();
+  } catch (err) {
+    showToast('更新失败: ' + err.message, 'error');
+  }
+}
+
+async function deleteKey(id) {
+  if (!confirm('确定要删除此密钥吗？')) return;
+  try {
+    await apiFetch('/api/admin/keys/' + id, { method: 'DELETE' });
+    showToast('密钥已删除');
+    loadKeys();
+  } catch (err) {
+    showToast('删除失败: ' + err.message, 'error');
+  }
+}
+
+// ===== Provider Keys =====
+async function loadProviderKeys() {
+  try {
+    const res = await apiFetch('/api/admin/provider-keys');
+    const body = document.getElementById('providerKeysBody');
+    if (res.data.length === 0) {
+      body.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted)">暂无数据</td></tr>';
+      return;
+    }
+    body.innerHTML = res.data.map(k => `
+      <tr>
+        <td><span class="badge badge-info">${k.provider}</span></td>
+        <td><code>${k.key_prefix}</code></td>
+        <td>${k.priority}</td>
+        <td>${k.usage_count}</td>
+        <td><span class="badge ${k.is_active ? 'badge-active' : 'badge-inactive'}">${k.is_active ? '启用' : '禁用'}</span></td>
+        <td>
+          <button class="btn btn-sm ${k.is_active ? 'btn-danger' : 'btn-primary'}" onclick="toggleProviderKey(${k.id}, ${k.is_active})">
+            ${k.is_active ? '禁用' : '启用'}
+          </button>
+          <button class="btn btn-sm btn-danger" onclick="deleteProviderKey(${k.id})">删除</button>
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    showToast('加载提供商密钥失败: ' + err.message, 'error');
+  }
+}
+
+function showCreateProviderKeyModal() {
+  document.getElementById('newProviderKeyProvider').value = 'openai';
+  document.getElementById('newProviderKeyValue').value = '';
+  document.getElementById('newProviderKeyBaseUrl').value = '';
+  document.getElementById('newProviderKeyPriority').value = '0';
+  showModal('createProviderKeyModal');
+}
+
+async function createProviderKey() {
+  const provider = document.getElementById('newProviderKeyProvider').value;
+  const apiKey = document.getElementById('newProviderKeyValue').value;
+  const baseUrl = document.getElementById('newProviderKeyBaseUrl').value;
+  const priority = parseInt(document.getElementById('newProviderKeyPriority').value) || 0;
+
+  if (!apiKey) { showToast('请输入 API 密钥', 'error'); return; }
+
+  try {
+    await apiFetch('/api/admin/provider-keys', {
+      method: 'POST',
+      body: JSON.stringify({ provider, api_key: apiKey, base_url: baseUrl || null, priority }),
+    });
+    closeModal('createProviderKeyModal');
+    showToast('提供商密钥已添加');
+    loadProviderKeys();
+  } catch (err) {
+    showToast('添加失败: ' + err.message, 'error');
+  }
+}
+
+async function toggleProviderKey(id, currentActive) {
+  try {
+    await apiFetch('/api/admin/provider-keys/' + id, {
+      method: 'PATCH',
+      body: JSON.stringify({ is_active: currentActive ? 0 : 1 }),
+    });
+    showToast('密钥状态已更新');
+    loadProviderKeys();
+  } catch (err) {
+    showToast('更新失败: ' + err.message, 'error');
+  }
+}
+
+async function deleteProviderKey(id) {
+  if (!confirm('确定要删除此提供商密钥吗？')) return;
+  try {
+    await apiFetch('/api/admin/provider-keys/' + id, { method: 'DELETE' });
+    showToast('密钥已删除');
+    loadProviderKeys();
+  } catch (err) {
+    showToast('删除失败: ' + err.message, 'error');
+  }
+}
+
+// ===== Analytics =====
+async function loadAnalytics() {
+  try {
+    const modelFilter = document.getElementById('analyticsModelFilter').value;
+    const statusFilter = document.getElementById('analyticsStatusFilter').value;
+    let url = `/api/admin/analytics?page=${analyticsPage}&page_size=${PAGE_SIZE}`;
+    if (modelFilter) url += '&model=' + encodeURIComponent(modelFilter);
+    if (statusFilter) url += '&status=' + encodeURIComponent(statusFilter);
+
+    const res = await apiFetch(url);
+    const body = document.getElementById('analyticsBody');
+    if (!res.data || res.data.records.length === 0) {
+      body.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted)">暂无数据</td></tr>';
+      document.getElementById('analyticsInfo').textContent = '第 0 页，共 0 条';
+      return;
+    }
+    body.innerHTML = res.data.records.map(r => `
+      <tr>
+        <td>${new Date(r.timestamp).toLocaleString()}</td>
+        <td><code>${r.model_id}</code></td>
+        <td>${r.provider}</td>
+        <td>${r.request_duration_ms}</td>
+        <td>${r.total_tokens}</td>
+        <td><span class="badge ${r.status === 'success' ? 'badge-active' : 'badge-inactive'}">${r.status}</span></td>
+      </tr>
+    `).join('');
+    const total = res.pagination?.total || 0;
+    document.getElementById('analyticsInfo').textContent = `第 ${analyticsPage} 页，共 ${total} 条`;
+    document.getElementById('prevAnalyticsPage').disabled = analyticsPage <= 1;
+    document.getElementById('nextAnalyticsPage').disabled = analyticsPage * PAGE_SIZE >= total;
+
+    // Populate model filter
+    const models = [...new Set(res.data.records.map(r => r.model_id))];
+    const filterSelect = document.getElementById('analyticsModelFilter');
+    const currentVal = filterSelect.value;
+    if (filterSelect.options.length <= 1) {
+      models.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m;
+        opt.textContent = m;
+        filterSelect.appendChild(opt);
+      });
+      filterSelect.value = currentVal;
+    }
+  } catch (err) {
+    showToast('加载分析数据失败: ' + err.message, 'error');
+  }
+}
+
+function changeAnalyticsPage(delta) {
+  analyticsPage = Math.max(1, analyticsPage + delta);
+  loadAnalytics();
+}
+
+// ===== Settings =====
+async function loadSettings() {
+  try {
+    const res = await apiFetch('/api/admin/settings');
+    if (res.data) {
+      if (res.data.rate_limit) document.getElementById('setting_rate_limit').value = res.data.rate_limit;
+      if (res.data.session_expiry) document.getElementById('setting_session_expiry').value = res.data.session_expiry;
+    }
+  } catch (err) {
+    // Silent fail
+  }
+}
+
+async function saveSettings() {
+  const rateLimit = document.getElementById('setting_rate_limit').value;
+  const sessionExpiry = document.getElementById('setting_session_expiry').value;
+  const data = {};
+  if (rateLimit) data.rate_limit = rateLimit;
+  if (sessionExpiry) data.session_expiry = sessionExpiry;
+
+  try {
+    await apiFetch('/api/admin/settings', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    showToast('设置已保存');
+  } catch (err) {
+    showToast('保存失败: ' + err.message, 'error');
+  }
+}
+
+// ===== Playground =====
+async function loadPlaygroundModels() {
+  try {
+    const res = await apiFetch('/api/admin/models');
+    const select = document.getElementById('playgroundModel');
+    const currentVal = select.value;
+    // Only populate if empty
+    if (select.options.length <= 1) {
+      if (res.data.length > 0) {
+        const activeModels = res.data.filter(m => m.is_active);
+        select.innerHTML = '<option value="">选择模型...</option>' +
+          activeModels.map(m => `<option value="${m.model_id}">${m.display_name || m.model_id}</option>`).join('');
+      } else {
+        select.innerHTML = '<option value="">选择模型...</option>' +
+          ['gpt-4o-mini', 'gpt-4o', 'claude-3-5-sonnet-20241022', 'deepseek-chat', 'gemini-2.0-flash']
+            .map(m => `<option value="${m}">${m}</option>`).join('');
+      }
+      select.value = currentVal;
+    }
+  } catch (err) {
+    // Fallback model list
+    const select = document.getElementById('playgroundModel');
+    if (select.options.length <= 1) {
+      select.innerHTML = '<option value="">选择模型...</option>' +
+        ['gpt-4o-mini', 'gpt-4o', 'claude-3-5-sonnet-20241022', 'deepseek-chat', 'gemini-2.0-flash']
+          .map(m => `<option value="${m}">${m}</option>`).join('');
+    }
+  }
+}
+
+async function sendPlaygroundMessage() {
+  const input = document.getElementById('playgroundInput');
+  const model = document.getElementById('playgroundModel').value;
+  const messagesEl = document.getElementById('playgroundMessages');
+  const sendBtn = document.getElementById('playgroundSendBtn');
+
+  const text = input.value.trim();
+  if (!text) return;
+  if (!model) { showToast('请先选择模型', 'error'); return; }
+
+  // Add user message
+  messagesEl.innerHTML += `<div class="chat-message user">${escapeHtml(text)}</div>`;
+  input.value = '';
+  sendBtn.disabled = true;
+  sendBtn.textContent = '发送中...';
+
+  // Add placeholder for response
+  const responseId = 'resp-' + Date.now();
+  messagesEl.innerHTML += `<div class="chat-message assistant" id="${responseId}"><div class="loading"></div> 思考中...</div>`;
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  try {
+    const res = await fetch('/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + authToken,
+      },
+      body: JSON.stringify({
+        model: model,
+        messages: [{ role: 'user', content: text }],
+        temperature: 0.7,
+        max_tokens: 2048,
+      }),
+    });
+
+    const data = await res.json();
+    const responseEl = document.getElementById(responseId);
+
+    if (!res.ok) {
+      responseEl.className = 'chat-message error';
+      responseEl.textContent = '错误: ' + (data.error || '请求失败');
+    } else {
+      const content = data.choices?.[0]?.message?.content || '无响应';
+      responseEl.innerHTML = escapeHtml(content);
+    }
+  } catch (err) {
+    const responseEl = document.getElementById(responseId);
+    responseEl.className = 'chat-message error';
+    responseEl.textContent = '网络错误: ' + err.message;
+  } finally {
+    sendBtn.disabled = false;
+    sendBtn.textContent = '发送';
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+}
+
+function clearPlayground() {
+  document.getElementById('playgroundMessages').innerHTML =
+    '<div class="chat-message assistant">对话已清空。选择一个模型并开始新的对话。</div>';
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ===== Init =====
+(function init() {
+  if (authToken) {
+    // Verify token
+    fetch('/api/admin/auth/verify', {
+      headers: { 'Authorization': 'Bearer ' + authToken },
+    }).then(res => {
+      if (res.ok) {
+        showDashboard();
+        loadSettings();
+      } else {
+        localStorage.removeItem('auth_token');
+        authToken = null;
+      }
+    }).catch(() => {
+      // Noop
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
