@@ -54,6 +54,8 @@ export function KeysPage() {
     try {
       const r = await api.listTokens();
       setTokens(r.tokens);
+    } catch {
+      // 静默处理,UI 显示空状态
     } finally {
       setLoading(false);
     }
@@ -63,6 +65,8 @@ export function KeysPage() {
     try {
       const r = await api.listKeys();
       setKeys(r.keys);
+    } catch {
+      // 静默处理,UI 显示空状态
     } finally {
       setKeysLoading(false);
     }
