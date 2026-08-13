@@ -1,0 +1,9 @@
+name = "mcp-admin"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+compatibility_flags = ["nodejs_compat"]
+account_id = "de9cc5da9705c7edf34e7e4e0ac9e360"
+
+[vars]
+ENVIRONMENT = "production"
+API_BASE = "https://api.zjkl0330.dpdns.org"

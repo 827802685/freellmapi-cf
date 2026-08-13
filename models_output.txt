@@ -1,0 +1,2762 @@
+Proxy environment variables detected. We'll use your proxy for fetch requests.
+
+ ⛅️ wrangler 3.114.17
+---------------------
+
+🌀 Executing on remote database freellmapi (da670d36-163c-4821-8835-81bbe34f22b4):
+🌀 To execute on your local development database, remove the --remote flag from your wrangler command.
+🚣 Executed 1 command in 1.17ms
+[
+  {
+    "results": [
+      {
+        "id": "bailian:kimi/kimi-k3",
+        "platform": "bailian",
+        "model_name": "kimi/kimi-k3",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3.7-text-embedding",
+        "platform": "bailian",
+        "model_name": "qwen3.7-text-embedding",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-audio-3.0-realtime-flash",
+        "platform": "bailian",
+        "model_name": "qwen-audio-3.0-realtime-flash",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-audio-3.0-realtime-plus",
+        "platform": "bailian",
+        "model_name": "qwen-audio-3.0-realtime-plus",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:glm-5.2-fast-preview",
+        "platform": "bailian",
+        "model_name": "glm-5.2-fast-preview",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:kimi/kimi-k2.7-code-highspeed",
+        "platform": "bailian",
+        "model_name": "kimi/kimi-k2.7-code-highspeed",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:xiaomi/mimo-v2.5-pro",
+        "platform": "bailian",
+        "model_name": "xiaomi/mimo-v2.5-pro",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:MiniMax/MiniMax-M3",
+        "platform": "bailian",
+        "model_name": "MiniMax/MiniMax-M3",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:ZHIPU/GLM-5.2",
+        "platform": "bailian",
+        "model_name": "ZHIPU/GLM-5.2",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-image-2.0-pro-2026-06-22",
+        "platform": "bailian",
+        "model_name": "qwen-image-2.0-pro-2026-06-22",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:test-sre-gpu-auto-handle",
+        "platform": "bailian",
+        "model_name": "test-sre-gpu-auto-handle",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:fun-asr-flash-2026-06-15",
+        "platform": "bailian",
+        "model_name": "fun-asr-flash-2026-06-15",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:glm-5.2",
+        "platform": "bailian",
+        "model_name": "glm-5.2",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:kimi/kimi-k2.7-code",
+        "platform": "bailian",
+        "model_name": "kimi/kimi-k2.7-code",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:kimi-k2.7-code",
+        "platform": "bailian",
+        "model_name": "kimi-k2.7-code",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:sre-gpu-auto-handle",
+        "platform": "bailian",
+        "model_name": "sre-gpu-auto-handle",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.7-max-2026-06-08",
+        "platform": "bailian",
+        "model_name": "qwen3.7-max-2026-06-08",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-ocr",
+        "platform": "bailian",
+        "model_name": "qwen3.5-ocr",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.7-plus-2026-05-26",
+        "platform": "bailian",
+        "model_name": "qwen3.7-plus-2026-05-26",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.7-plus",
+        "platform": "bailian",
+        "model_name": "qwen3.7-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.7-max-2026-05-17",
+        "platform": "bailian",
+        "model_name": "qwen3.7-max-2026-05-17",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.7-max-preview",
+        "platform": "bailian",
+        "model_name": "qwen3.7-max-preview",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:ZHIPU/GLM-5",
+        "platform": "bailian",
+        "model_name": "ZHIPU/GLM-5",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3.7-max-2026-05-20",
+        "platform": "bailian",
+        "model_name": "qwen3.7-max-2026-05-20",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.7-max",
+        "platform": "bailian",
+        "model_name": "qwen3.7-max",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-livetranslate-flash-realtime-2026-05-19",
+        "platform": "bailian",
+        "model_name": "qwen3.5-livetranslate-flash-realtime-2026-05-19",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3.5-livetranslate-flash-realtime",
+        "platform": "bailian",
+        "model_name": "qwen3.5-livetranslate-flash-realtime",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:ZHIPU/GLM-5.1",
+        "platform": "bailian",
+        "model_name": "ZHIPU/GLM-5.1",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:kimi/kimi-k2.6",
+        "platform": "bailian",
+        "model_name": "kimi/kimi-k2.6",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:deepseek-v4-flash",
+        "platform": "bailian",
+        "model_name": "deepseek-v4-flash",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:deepseek-v4-pro",
+        "platform": "bailian",
+        "model_name": "deepseek-v4-pro",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-image-2.0-pro-2026-04-22",
+        "platform": "bailian",
+        "model_name": "qwen-image-2.0-pro-2026-04-22",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3.5-plus-2026-04-20",
+        "platform": "bailian",
+        "model_name": "qwen3.5-plus-2026-04-20",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.6-27b",
+        "platform": "bailian",
+        "model_name": "qwen3.6-27b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:kimi-k2.6",
+        "platform": "bailian",
+        "model_name": "kimi-k2.6",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.6-max-preview",
+        "platform": "bailian",
+        "model_name": "qwen3.6-max-preview",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.6-35b-a3b",
+        "platform": "bailian",
+        "model_name": "qwen3.6-35b-a3b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.6-flash-2026-04-16",
+        "platform": "bailian",
+        "model_name": "qwen3.6-flash-2026-04-16",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.6-flash",
+        "platform": "bailian",
+        "model_name": "qwen3.6-flash",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:glm-5.1",
+        "platform": "bailian",
+        "model_name": "glm-5.1",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:vanchin/deepseek-v3.1-terminus",
+        "platform": "bailian",
+        "model_name": "vanchin/deepseek-v3.1-terminus",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:vanchin/deepseek-v3",
+        "platform": "bailian",
+        "model_name": "vanchin/deepseek-v3",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:vanchin/deepseek-r1",
+        "platform": "bailian",
+        "model_name": "vanchin/deepseek-r1",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:vanchin/deepseek-ocr",
+        "platform": "bailian",
+        "model_name": "vanchin/deepseek-ocr",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:vanchin/deepseek-v3.2-think",
+        "platform": "bailian",
+        "model_name": "vanchin/deepseek-v3.2-think",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3.5-omni-plus-realtime-2026-03-15",
+        "platform": "bailian",
+        "model_name": "qwen3.5-omni-plus-realtime-2026-03-15",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3.5-omni-plus-realtime",
+        "platform": "bailian",
+        "model_name": "qwen3.5-omni-plus-realtime",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3.5-omni-plus-2026-03-15",
+        "platform": "bailian",
+        "model_name": "qwen3.5-omni-plus-2026-03-15",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-omni-plus",
+        "platform": "bailian",
+        "model_name": "qwen3.5-omni-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-omni-flash-realtime-2026-03-15",
+        "platform": "bailian",
+        "model_name": "qwen3.5-omni-flash-realtime-2026-03-15",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3.5-omni-flash-realtime",
+        "platform": "bailian",
+        "model_name": "qwen3.5-omni-flash-realtime",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3.5-omni-flash-2026-03-15",
+        "platform": "bailian",
+        "model_name": "qwen3.5-omni-flash-2026-03-15",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-omni-flash",
+        "platform": "bailian",
+        "model_name": "qwen3.5-omni-flash",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.6-plus-2026-04-02",
+        "platform": "bailian",
+        "model_name": "qwen3.6-plus-2026-04-02",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.6-plus",
+        "platform": "bailian",
+        "model_name": "qwen3.6-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:wan2.7-image-pro",
+        "platform": "bailian",
+        "model_name": "wan2.7-image-pro",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:wan2.7-image",
+        "platform": "bailian",
+        "model_name": "wan2.7-image",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:MiniMax/MiniMax-M2.7",
+        "platform": "bailian",
+        "model_name": "MiniMax/MiniMax-M2.7",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:MiniMax/speech-2.8-hd",
+        "platform": "bailian",
+        "model_name": "MiniMax/speech-2.8-hd",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:MiniMax/speech-2.8-turbo",
+        "platform": "bailian",
+        "model_name": "MiniMax/speech-2.8-turbo",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:MiniMax/speech-02-turbo",
+        "platform": "bailian",
+        "model_name": "MiniMax/speech-02-turbo",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:MiniMax/speech-02-hd",
+        "platform": "bailian",
+        "model_name": "MiniMax/speech-02-hd",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-deep-research-2025-12-15",
+        "platform": "bailian",
+        "model_name": "qwen-deep-research-2025-12-15",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-image-2.0-2026-03-03",
+        "platform": "bailian",
+        "model_name": "qwen-image-2.0-2026-03-03",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-image-2.0-pro",
+        "platform": "bailian",
+        "model_name": "qwen-image-2.0-pro",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-image-2.0-pro-2026-03-03",
+        "platform": "bailian",
+        "model_name": "qwen-image-2.0-pro-2026-03-03",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-image-2.0",
+        "platform": "bailian",
+        "model_name": "qwen-image-2.0",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-asr-flash-2026-02-10",
+        "platform": "bailian",
+        "model_name": "qwen3-asr-flash-2026-02-10",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:glm-5",
+        "platform": "bailian",
+        "model_name": "glm-5",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-flash-character-2026-02-26",
+        "platform": "bailian",
+        "model_name": "qwen-flash-character-2026-02-26",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:MiniMax-M2.5",
+        "platform": "bailian",
+        "model_name": "MiniMax-M2.5",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-flash-2026-02-23",
+        "platform": "bailian",
+        "model_name": "qwen3.5-flash-2026-02-23",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-flash",
+        "platform": "bailian",
+        "model_name": "qwen3.5-flash",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-122b-a10b",
+        "platform": "bailian",
+        "model_name": "qwen3.5-122b-a10b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-35b-a3b",
+        "platform": "bailian",
+        "model_name": "qwen3.5-35b-a3b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-27b",
+        "platform": "bailian",
+        "model_name": "qwen3.5-27b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-coder-next",
+        "platform": "bailian",
+        "model_name": "qwen3-coder-next",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-397b-a17b",
+        "platform": "bailian",
+        "model_name": "qwen3.5-397b-a17b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-plus-2026-02-15",
+        "platform": "bailian",
+        "model_name": "qwen3.5-plus-2026-02-15",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3.5-plus",
+        "platform": "bailian",
+        "model_name": "qwen3.5-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-asr-flash-realtime-2026-02-10",
+        "platform": "bailian",
+        "model_name": "qwen3-asr-flash-realtime-2026-02-10",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:MiniMax/MiniMax-M2.1",
+        "platform": "bailian",
+        "model_name": "MiniMax/MiniMax-M2.1",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:MiniMax/MiniMax-M2.5",
+        "platform": "bailian",
+        "model_name": "MiniMax/MiniMax-M2.5",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:kimi/kimi-k2.5",
+        "platform": "bailian",
+        "model_name": "kimi/kimi-k2.5",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-vd-2026-01-26",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-vd-2026-01-26",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-instruct-flash-2026-01-26",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-instruct-flash-2026-01-26",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-instruct-flash",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-instruct-flash",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-vc-2026-01-22",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-vc-2026-01-22",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:glm-4.7",
+        "platform": "bailian",
+        "model_name": "glm-4.7",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-max",
+        "platform": "bailian",
+        "model_name": "qwen3-max",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-tts-instruct-flash-realtime-2026-01-22",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-instruct-flash-realtime-2026-01-22",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-instruct-flash-realtime",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-instruct-flash-realtime",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-vd-realtime-2026-01-15",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-vd-realtime-2026-01-15",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:kimi-k2.5",
+        "platform": "bailian",
+        "model_name": "kimi-k2.5",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:tongyi-xiaomi-analysis-flash",
+        "platform": "bailian",
+        "model_name": "tongyi-xiaomi-analysis-flash",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:tongyi-xiaomi-analysis-pro",
+        "platform": "bailian",
+        "model_name": "tongyi-xiaomi-analysis-pro",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:siliconflow/deepseek-v3.2",
+        "platform": "bailian",
+        "model_name": "siliconflow/deepseek-v3.2",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:siliconflow/deepseek-v3.1-terminus",
+        "platform": "bailian",
+        "model_name": "siliconflow/deepseek-v3.1-terminus",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:siliconflow/deepseek-v3-0324",
+        "platform": "bailian",
+        "model_name": "siliconflow/deepseek-v3-0324",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:siliconflow/deepseek-r1-0528",
+        "platform": "bailian",
+        "model_name": "siliconflow/deepseek-r1-0528",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:MiniMax-M2.1",
+        "platform": "bailian",
+        "model_name": "MiniMax-M2.1",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-vl-flash-2026-01-22",
+        "platform": "bailian",
+        "model_name": "qwen3-vl-flash-2026-01-22",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-max-2026-01-23",
+        "platform": "bailian",
+        "model_name": "qwen3-max-2026-01-23",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-tts-vc-realtime-2026-01-15",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-vc-realtime-2026-01-15",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-image-edit-max-2026-01-16",
+        "platform": "bailian",
+        "model_name": "qwen-image-edit-max-2026-01-16",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-image-edit-max",
+        "platform": "bailian",
+        "model_name": "qwen-image-edit-max",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-image-plus-2026-01-09",
+        "platform": "bailian",
+        "model_name": "qwen-image-plus-2026-01-09",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-flash-character",
+        "platform": "bailian",
+        "model_name": "qwen-flash-character",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-image-max-2025-12-30",
+        "platform": "bailian",
+        "model_name": "qwen-image-max-2025-12-30",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-image-max",
+        "platform": "bailian",
+        "model_name": "qwen-image-max",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-flash",
+        "platform": "bailian",
+        "model_name": "qwen-flash",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:z-image-turbo",
+        "platform": "bailian",
+        "model_name": "z-image-turbo",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-vl-plus-2025-12-19",
+        "platform": "bailian",
+        "model_name": "qwen3-vl-plus-2025-12-19",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-tts-vd-realtime-2025-12-16",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-vd-realtime-2025-12-16",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-image-edit-plus-2025-12-15",
+        "platform": "bailian",
+        "model_name": "qwen-image-edit-plus-2025-12-15",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:deepseek-v3.2",
+        "platform": "bailian",
+        "model_name": "deepseek-v3.2",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-omni-flash-2025-12-01",
+        "platform": "bailian",
+        "model_name": "qwen3-omni-flash-2025-12-01",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-omni-flash-realtime-2025-12-01",
+        "platform": "bailian",
+        "model_name": "qwen3-omni-flash-realtime-2025-12-01",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-livetranslate-flash-2025-12-01",
+        "platform": "bailian",
+        "model_name": "qwen3-livetranslate-flash-2025-12-01",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-livetranslate-flash",
+        "platform": "bailian",
+        "model_name": "qwen3-livetranslate-flash",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-plus-2025-12-01",
+        "platform": "bailian",
+        "model_name": "qwen-plus-2025-12-01",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-tts-vc-realtime-2025-11-27",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-vc-realtime-2025-11-27",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-flash-2025-11-27",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-flash-2025-11-27",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-flash-realtime-2025-11-27",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-flash-realtime-2025-11-27",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-plus-2025-11-05",
+        "platform": "bailian",
+        "model_name": "qwen-plus-2025-11-05",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-mt-lite",
+        "platform": "bailian",
+        "model_name": "qwen-mt-lite",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-vl-ocr-2025-11-20",
+        "platform": "bailian",
+        "model_name": "qwen-vl-ocr-2025-11-20",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:kimi-k2-thinking",
+        "platform": "bailian",
+        "model_name": "kimi-k2-thinking",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-mt-flash",
+        "platform": "bailian",
+        "model_name": "qwen-mt-flash",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:gui-plus",
+        "platform": "bailian",
+        "model_name": "gui-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-image-edit-plus-2025-10-30",
+        "platform": "bailian",
+        "model_name": "qwen-image-edit-plus-2025-10-30",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-image-edit-plus",
+        "platform": "bailian",
+        "model_name": "qwen-image-edit-plus",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-deep-search-planning",
+        "platform": "bailian",
+        "model_name": "qwen-deep-search-planning",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-asr-flash-realtime-2025-10-27",
+        "platform": "bailian",
+        "model_name": "qwen3-asr-flash-realtime-2025-10-27",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-asr-flash-realtime",
+        "platform": "bailian",
+        "model_name": "qwen3-asr-flash-realtime",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-vl-flash",
+        "platform": "bailian",
+        "model_name": "qwen3-vl-flash",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-vl-flash-2025-10-15",
+        "platform": "bailian",
+        "model_name": "qwen3-vl-flash-2025-10-15",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-tts-flash",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-flash",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-flash-2025-09-18",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-flash-2025-09-18",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-flash-realtime-2025-09-18",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-flash-realtime-2025-09-18",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-tts-flash-realtime",
+        "platform": "bailian",
+        "model_name": "qwen3-tts-flash-realtime",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-omni-flash-realtime",
+        "platform": "bailian",
+        "model_name": "qwen3-omni-flash-realtime",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-omni-flash",
+        "platform": "bailian",
+        "model_name": "qwen3-omni-flash",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-omni-flash-2025-09-15",
+        "platform": "bailian",
+        "model_name": "qwen3-omni-flash-2025-09-15",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-omni-flash-realtime-2025-09-15",
+        "platform": "bailian",
+        "model_name": "qwen3-omni-flash-realtime-2025-09-15",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-s2s-flash-realtime-2025-09-22",
+        "platform": "bailian",
+        "model_name": "qwen3-s2s-flash-realtime-2025-09-22",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-livetranslate-flash-realtime",
+        "platform": "bailian",
+        "model_name": "qwen3-livetranslate-flash-realtime",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-livetranslate-flash-realtime-2025-09-22",
+        "platform": "bailian",
+        "model_name": "qwen3-livetranslate-flash-realtime-2025-09-22",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-turbo-2024-11-01",
+        "platform": "bailian",
+        "model_name": "qwen-turbo-2024-11-01",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-plus-2025-01-25",
+        "platform": "bailian",
+        "model_name": "qwen-plus-2025-01-25",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwq-plus",
+        "platform": "bailian",
+        "model_name": "qwq-plus",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qvq-max",
+        "platform": "bailian",
+        "model_name": "qvq-max",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-omni-turbo",
+        "platform": "bailian",
+        "model_name": "qwen-omni-turbo",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-plus-2025-04-28",
+        "platform": "bailian",
+        "model_name": "qwen-plus-2025-04-28",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-235b-a22b-instruct-2507",
+        "platform": "bailian",
+        "model_name": "qwen3-235b-a22b-instruct-2507",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-235b-a22b-thinking-2507",
+        "platform": "bailian",
+        "model_name": "qwen3-235b-a22b-thinking-2507",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-30b-a3b-thinking-2507",
+        "platform": "bailian",
+        "model_name": "qwen3-30b-a3b-thinking-2507",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-30b-a3b-instruct-2507",
+        "platform": "bailian",
+        "model_name": "qwen3-30b-a3b-instruct-2507",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-coder-flash",
+        "platform": "bailian",
+        "model_name": "qwen3-coder-flash",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-coder-plus-2025-09-23",
+        "platform": "bailian",
+        "model_name": "qwen3-coder-plus-2025-09-23",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-max-2025-09-23",
+        "platform": "bailian",
+        "model_name": "qwen3-max-2025-09-23",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-vl-plus",
+        "platform": "bailian",
+        "model_name": "qwen3-vl-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-vl-plus-2025-09-23",
+        "platform": "bailian",
+        "model_name": "qwen3-vl-plus-2025-09-23",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-plus-2025-09-11",
+        "platform": "bailian",
+        "model_name": "qwen-plus-2025-09-11",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-next-80b-a3b-thinking",
+        "platform": "bailian",
+        "model_name": "qwen3-next-80b-a3b-thinking",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-next-80b-a3b-instruct",
+        "platform": "bailian",
+        "model_name": "qwen3-next-80b-a3b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-max-preview",
+        "platform": "bailian",
+        "model_name": "qwen3-max-preview",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:deepseek-v3.1",
+        "platform": "bailian",
+        "model_name": "deepseek-v3.1",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-coder-plus",
+        "platform": "bailian",
+        "model_name": "qwen3-coder-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-coder-plus-2025-07-22",
+        "platform": "bailian",
+        "model_name": "qwen3-coder-plus-2025-07-22",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-plus-2025-07-14",
+        "platform": "bailian",
+        "model_name": "qwen-plus-2025-07-14",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-coder-480b-a35b-instruct",
+        "platform": "bailian",
+        "model_name": "qwen3-coder-480b-a35b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-mt-turbo",
+        "platform": "bailian",
+        "model_name": "qwen-mt-turbo",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-mt-plus",
+        "platform": "bailian",
+        "model_name": "qwen-mt-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-tts-2025-05-22",
+        "platform": "bailian",
+        "model_name": "qwen-tts-2025-05-22",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qvq-plus",
+        "platform": "bailian",
+        "model_name": "qvq-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-32b",
+        "platform": "bailian",
+        "model_name": "qwen3-32b",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-30b-a3b",
+        "platform": "bailian",
+        "model_name": "qwen3-30b-a3b",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-235b-a22b",
+        "platform": "bailian",
+        "model_name": "qwen3-235b-a22b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen3-14b",
+        "platform": "bailian",
+        "model_name": "qwen3-14b",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen3-8b",
+        "platform": "bailian",
+        "model_name": "qwen3-8b",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:deepseek-v3",
+        "platform": "bailian",
+        "model_name": "deepseek-v3",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:deepseek-r1-distill-llama-70b",
+        "platform": "bailian",
+        "model_name": "deepseek-r1-distill-llama-70b",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:deepseek-r1-distill-qwen-32b",
+        "platform": "bailian",
+        "model_name": "deepseek-r1-distill-qwen-32b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:deepseek-r1-distill-qwen-14b",
+        "platform": "bailian",
+        "model_name": "deepseek-r1-distill-qwen-14b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:deepseek-r1-distill-llama-8b",
+        "platform": "bailian",
+        "model_name": "deepseek-r1-distill-llama-8b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:deepseek-r1-distill-qwen-1.5b",
+        "platform": "bailian",
+        "model_name": "deepseek-r1-distill-qwen-1.5b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:deepseek-r1-distill-qwen-7b",
+        "platform": "bailian",
+        "model_name": "deepseek-r1-distill-qwen-7b",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:deepseek-r1",
+        "platform": "bailian",
+        "model_name": "deepseek-r1",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen1.5-7b-chat",
+        "platform": "bailian",
+        "model_name": "qwen1.5-7b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-vl-ocr-latest",
+        "platform": "bailian",
+        "model_name": "qwen-vl-ocr-latest",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-vl-ocr",
+        "platform": "bailian",
+        "model_name": "qwen-vl-ocr",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-coder-plus-1106",
+        "platform": "bailian",
+        "model_name": "qwen-coder-plus-1106",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-coder-plus",
+        "platform": "bailian",
+        "model_name": "qwen-coder-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-math-turbo",
+        "platform": "bailian",
+        "model_name": "qwen-math-turbo",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-math-plus-latest",
+        "platform": "bailian",
+        "model_name": "qwen-math-plus-latest",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-math-plus-0919",
+        "platform": "bailian",
+        "model_name": "qwen-math-plus-0919",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-coder-turbo",
+        "platform": "bailian",
+        "model_name": "qwen-coder-turbo",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-math-plus",
+        "platform": "bailian",
+        "model_name": "qwen-math-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-plus-latest",
+        "platform": "bailian",
+        "model_name": "qwen-plus-latest",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen2.5-0.5b-instruct",
+        "platform": "bailian",
+        "model_name": "qwen2.5-0.5b-instruct",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen2.5-1.5b-instruct",
+        "platform": "bailian",
+        "model_name": "qwen2.5-1.5b-instruct",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-turbo-0919",
+        "platform": "bailian",
+        "model_name": "qwen-turbo-0919",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen2.5-math-1.5b-instruct",
+        "platform": "bailian",
+        "model_name": "qwen2.5-math-1.5b-instruct",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen2-0.5b-instruct",
+        "platform": "bailian",
+        "model_name": "qwen2-0.5b-instruct",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen2-7b-instruct",
+        "platform": "bailian",
+        "model_name": "qwen2-7b-instruct",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen2-1.5b-instruct",
+        "platform": "bailian",
+        "model_name": "qwen2-1.5b-instruct",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen2-57b-a14b-instruct",
+        "platform": "bailian",
+        "model_name": "qwen2-57b-a14b-instruct",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-long",
+        "platform": "bailian",
+        "model_name": "qwen-long",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-vl-max",
+        "platform": "bailian",
+        "model_name": "qwen-vl-max",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-vl-plus",
+        "platform": "bailian",
+        "model_name": "qwen-vl-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen1.5-110b-chat",
+        "platform": "bailian",
+        "model_name": "qwen1.5-110b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-14b-chat",
+        "platform": "bailian",
+        "model_name": "qwen-14b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:codeqwen1.5-7b-chat",
+        "platform": "bailian",
+        "model_name": "codeqwen1.5-7b-chat",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen1.5-0.5b-chat",
+        "platform": "bailian",
+        "model_name": "qwen1.5-0.5b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-1.8b-chat",
+        "platform": "bailian",
+        "model_name": "qwen-1.8b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-1.8b-longcontext-chat",
+        "platform": "bailian",
+        "model_name": "qwen-1.8b-longcontext-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-7b-chat",
+        "platform": "bailian",
+        "model_name": "qwen-7b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-72b-chat",
+        "platform": "bailian",
+        "model_name": "qwen-72b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen1.5-14b-chat",
+        "platform": "bailian",
+        "model_name": "qwen1.5-14b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-max-longcontext",
+        "platform": "bailian",
+        "model_name": "qwen-max-longcontext",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-max-1201",
+        "platform": "bailian",
+        "model_name": "qwen-max-1201",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen1.5-1.8b-chat",
+        "platform": "bailian",
+        "model_name": "qwen1.5-1.8b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen1.5-32b-chat",
+        "platform": "bailian",
+        "model_name": "qwen1.5-32b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen1.5-72b-chat",
+        "platform": "bailian",
+        "model_name": "qwen1.5-72b-chat",
+        "enabled": 0
+      },
+      {
+        "id": "bailian:qwen-plus",
+        "platform": "bailian",
+        "model_name": "qwen-plus",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-turbo",
+        "platform": "bailian",
+        "model_name": "qwen-turbo",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-max",
+        "platform": "bailian",
+        "model_name": "qwen-max",
+        "enabled": 1
+      },
+      {
+        "id": "bailian:qwen-max-0107",
+        "platform": "bailian",
+        "model_name": "qwen-max-0107",
+        "enabled": 0
+      },
+      {
+        "id": "cerebras:qwen-3-235b-a07b-instruct",
+        "platform": "cerebras",
+        "model_name": "qwen-3-235b-a07b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/moonshotai/kimi-k2.6",
+        "platform": "cloudflare",
+        "model_name": "@cf/moonshotai/kimi-k2.6",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/openai/gpt-oss-120b",
+        "platform": "cloudflare",
+        "model_name": "@cf/openai/gpt-oss-120b",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/nvidia/nemotron-3-120b-a12b",
+        "platform": "cloudflare",
+        "model_name": "@cf/nvidia/nemotron-3-120b-a12b",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/zai-org/glm-4.7-flash",
+        "platform": "cloudflare",
+        "model_name": "@cf/zai-org/glm-4.7-flash",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/google/gemma-4-26b-a4b-it",
+        "platform": "cloudflare",
+        "model_name": "@cf/google/gemma-4-26b-a4b-it",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/qwen/qwen3-30b-a3b-fp8",
+        "platform": "cloudflare",
+        "model_name": "@cf/qwen/qwen3-30b-a3b-fp8",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/zai/glm-4.7-flash",
+        "platform": "cloudflare",
+        "model_name": "@cf/zai/glm-4.7-flash",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/openai/gpt-oss-20b",
+        "platform": "cloudflare",
+        "model_name": "@cf/openai/gpt-oss-20b",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/meta/llama-4-scout-17b-16e-instruct",
+        "platform": "cloudflare",
+        "model_name": "@cf/meta/llama-4-scout-17b-16e-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+        "platform": "cloudflare",
+        "model_name": "@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/qwen/qwq-32b",
+        "platform": "cloudflare",
+        "model_name": "@cf/qwen/qwq-32b",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/qwen/qwen2.5-coder-32b-instruct",
+        "platform": "cloudflare",
+        "model_name": "@cf/qwen/qwen2.5-coder-32b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/mistralai/mistral-small-3.1-24b-instruct",
+        "platform": "cloudflare",
+        "model_name": "@cf/mistralai/mistral-small-3.1-24b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b",
+        "platform": "cloudflare",
+        "model_name": "@cf/deepseek-ai/deepseek-r1-distill-qwen-32b",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/meta/llama-3.2-11b-vision-instruct",
+        "platform": "cloudflare",
+        "model_name": "@cf/meta/llama-3.2-11b-vision-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/meta/llama-3.2-3b-instruct",
+        "platform": "cloudflare",
+        "model_name": "@cf/meta/llama-3.2-3b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "cloudflare:@cf/meta/llama-3.1-8b-instruct-fp8",
+        "platform": "cloudflare",
+        "model_name": "@cf/meta/llama-3.1-8b-instruct-fp8",
+        "enabled": 1
+      },
+      {
+        "id": "custom:gpt-4o-mini",
+        "platform": "custom",
+        "model_name": "gpt-4o-mini",
+        "enabled": 1
+      },
+      {
+        "id": "github:gpt-4o",
+        "platform": "github",
+        "model_name": "gpt-4o",
+        "enabled": 0
+      },
+      {
+        "id": "github:gpt-4o-mini",
+        "platform": "github",
+        "model_name": "gpt-4o-mini",
+        "enabled": 0
+      },
+      {
+        "id": "google:gemini-3.6-flash",
+        "platform": "google",
+        "model_name": "gemini-3.6-flash",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3.5-flash",
+        "platform": "google",
+        "model_name": "gemini-3.5-flash",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3.5-flash-lite",
+        "platform": "google",
+        "model_name": "gemini-3.5-flash-lite",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3.1-flash-lite",
+        "platform": "google",
+        "model_name": "gemini-3.1-flash-lite",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.5-flash",
+        "platform": "google",
+        "model_name": "gemini-2.5-flash",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.5-flash-lite",
+        "platform": "google",
+        "model_name": "gemini-2.5-flash-lite",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.5-pro",
+        "platform": "google",
+        "model_name": "gemini-2.5-pro",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3.1-pro-preview",
+        "platform": "google",
+        "model_name": "gemini-3.1-pro-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3-flash-preview",
+        "platform": "google",
+        "model_name": "gemini-3-flash-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.0-flash",
+        "platform": "google",
+        "model_name": "gemini-2.0-flash",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.0-flash-001",
+        "platform": "google",
+        "model_name": "gemini-2.0-flash-001",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.0-flash-lite-001",
+        "platform": "google",
+        "model_name": "gemini-2.0-flash-lite-001",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.0-flash-lite",
+        "platform": "google",
+        "model_name": "gemini-2.0-flash-lite",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.5-flash-preview-tts",
+        "platform": "google",
+        "model_name": "gemini-2.5-flash-preview-tts",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.5-pro-preview-tts",
+        "platform": "google",
+        "model_name": "gemini-2.5-pro-preview-tts",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemma-4-26b-a4b-it",
+        "platform": "google",
+        "model_name": "gemma-4-26b-a4b-it",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemma-4-31b-it",
+        "platform": "google",
+        "model_name": "gemma-4-31b-it",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-flash-latest",
+        "platform": "google",
+        "model_name": "gemini-flash-latest",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-flash-lite-latest",
+        "platform": "google",
+        "model_name": "gemini-flash-lite-latest",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-pro-latest",
+        "platform": "google",
+        "model_name": "gemini-pro-latest",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.5-flash-image",
+        "platform": "google",
+        "model_name": "gemini-2.5-flash-image",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3-pro-preview",
+        "platform": "google",
+        "model_name": "gemini-3-pro-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3.1-pro-preview-customtools",
+        "platform": "google",
+        "model_name": "gemini-3.1-pro-preview-customtools",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3.1-flash-lite-preview",
+        "platform": "google",
+        "model_name": "gemini-3.1-flash-lite-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3-pro-image-preview",
+        "platform": "google",
+        "model_name": "gemini-3-pro-image-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3-pro-image",
+        "platform": "google",
+        "model_name": "gemini-3-pro-image",
+        "enabled": 1
+      },
+      {
+        "id": "google:nano-banana-pro-preview",
+        "platform": "google",
+        "model_name": "nano-banana-pro-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3.1-flash-image-preview",
+        "platform": "google",
+        "model_name": "gemini-3.1-flash-image-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3.1-flash-image",
+        "platform": "google",
+        "model_name": "gemini-3.1-flash-image",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3.1-flash-lite-image",
+        "platform": "google",
+        "model_name": "gemini-3.1-flash-lite-image",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-omni-flash-preview",
+        "platform": "google",
+        "model_name": "gemini-omni-flash-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:lyria-3-clip-preview",
+        "platform": "google",
+        "model_name": "lyria-3-clip-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:lyria-3-pro-preview",
+        "platform": "google",
+        "model_name": "lyria-3-pro-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-3.1-flash-tts-preview",
+        "platform": "google",
+        "model_name": "gemini-3.1-flash-tts-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-robotics-er-1.5-preview",
+        "platform": "google",
+        "model_name": "gemini-robotics-er-1.5-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-robotics-er-1.6-preview",
+        "platform": "google",
+        "model_name": "gemini-robotics-er-1.6-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-robotics-er-2-preview",
+        "platform": "google",
+        "model_name": "gemini-robotics-er-2-preview",
+        "enabled": 1
+      },
+      {
+        "id": "google:gemini-2.5-computer-use-preview-10-2025",
+        "platform": "google",
+        "model_name": "gemini-2.5-computer-use-preview-10-2025",
+        "enabled": 1
+      },
+      {
+        "id": "google:antigravity-preview-05-2026",
+        "platform": "google",
+        "model_name": "antigravity-preview-05-2026",
+        "enabled": 1
+      },
+      {
+        "id": "google:deep-research-max-preview-04-2026",
+        "platform": "google",
+        "model_name": "deep-research-max-preview-04-2026",
+        "enabled": 1
+      },
+      {
+        "id": "google:deep-research-preview-04-2026",
+        "platform": "google",
+        "model_name": "deep-research-preview-04-2026",
+        "enabled": 1
+      },
+      {
+        "id": "google:deep-research-pro-preview-12-2025",
+        "platform": "google",
+        "model_name": "deep-research-pro-preview-12-2025",
+        "enabled": 1
+      },
+      {
+        "id": "groq:llama-3.3-70b-versatile",
+        "platform": "groq",
+        "model_name": "llama-3.3-70b-versatile",
+        "enabled": 1
+      },
+      {
+        "id": "groq:llama-3.1-8b-instant",
+        "platform": "groq",
+        "model_name": "llama-3.1-8b-instant",
+        "enabled": 1
+      },
+      {
+        "id": "groq:openai/gpt-oss-120b",
+        "platform": "groq",
+        "model_name": "openai/gpt-oss-120b",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:Inkling",
+        "platform": "llm7",
+        "model_name": "Inkling",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:Inkling-Small",
+        "platform": "llm7",
+        "model_name": "Inkling-Small",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:L3-8B-Lunaris-v1-Turbo",
+        "platform": "llm7",
+        "model_name": "L3-8B-Lunaris-v1-Turbo",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:XiaomiMiMo/MiMo-V2.5",
+        "platform": "llm7",
+        "model_name": "XiaomiMiMo/MiMo-V2.5",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:XiaomiMiMo/MiMo-V2.5-Pro",
+        "platform": "llm7",
+        "model_name": "XiaomiMiMo/MiMo-V2.5-Pro",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:claude-fable-5",
+        "platform": "llm7",
+        "model_name": "claude-fable-5",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:claude-opus-4-8",
+        "platform": "llm7",
+        "model_name": "claude-opus-4-8",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:claude-opus-5",
+        "platform": "llm7",
+        "model_name": "claude-opus-5",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:claude-sonnet-5",
+        "platform": "llm7",
+        "model_name": "claude-sonnet-5",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:codestral-latest",
+        "platform": "llm7",
+        "model_name": "codestral-latest",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:deepseek-v4-flash",
+        "platform": "llm7",
+        "model_name": "deepseek-v4-flash",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:deepseek-v4-flash:0731",
+        "platform": "llm7",
+        "model_name": "deepseek-v4-flash:0731",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:flux-kontext-max",
+        "platform": "llm7",
+        "model_name": "flux-kontext-max",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gemini-3.1-flash-lite",
+        "platform": "llm7",
+        "model_name": "gemini-3.1-flash-lite",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gemini-3.5-flash-low",
+        "platform": "llm7",
+        "model_name": "gemini-3.5-flash-low",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gemini-omni-flash",
+        "platform": "llm7",
+        "model_name": "gemini-omni-flash",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gemini-veo31",
+        "platform": "llm7",
+        "model_name": "gemini-veo31",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gpt-5.4",
+        "platform": "llm7",
+        "model_name": "gpt-5.4",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gpt-5.5",
+        "platform": "llm7",
+        "model_name": "gpt-5.5",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gpt-5.6-luna",
+        "platform": "llm7",
+        "model_name": "gpt-5.6-luna",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gpt-5.6-sol",
+        "platform": "llm7",
+        "model_name": "gpt-5.6-sol",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gpt-5.6-terra",
+        "platform": "llm7",
+        "model_name": "gpt-5.6-terra",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gpt-image-2",
+        "platform": "llm7",
+        "model_name": "gpt-image-2",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:gpt-oss:20b",
+        "platform": "llm7",
+        "model_name": "gpt-oss:20b",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:grok-4.5",
+        "platform": "llm7",
+        "model_name": "grok-4.5",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:kimi-k2.7-code",
+        "platform": "llm7",
+        "model_name": "kimi-k2.7-code",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:kimi-k3",
+        "platform": "llm7",
+        "model_name": "kimi-k3",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:kling-v3.0-pro",
+        "platform": "llm7",
+        "model_name": "kling-v3.0-pro",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:kling-v3.0-turbo",
+        "platform": "llm7",
+        "model_name": "kling-v3.0-turbo",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:meta-Llama-3.1-8B-Instruct-Turbo",
+        "platform": "llm7",
+        "model_name": "meta-Llama-3.1-8B-Instruct-Turbo",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:minimax-m2.7",
+        "platform": "llm7",
+        "model_name": "minimax-m2.7",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:mistral-Small-24B-Instruct-2501",
+        "platform": "llm7",
+        "model_name": "mistral-Small-24B-Instruct-2501",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:seed-2.0-mini",
+        "platform": "llm7",
+        "model_name": "seed-2.0-mini",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:seedance-2.0",
+        "platform": "llm7",
+        "model_name": "seedance-2.0",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:seedance-2.0-fast",
+        "platform": "llm7",
+        "model_name": "seedance-2.0-fast",
+        "enabled": 1
+      },
+      {
+        "id": "llm7:seedance-2.0-mini",
+        "platform": "llm7",
+        "model_name": "seedance-2.0-mini",
+        "enabled": 1
+      },
+      {
+        "id": "mistral:mistral-large-2407",
+        "platform": "mistral",
+        "model_name": "mistral-large-2407",
+        "enabled": 1
+      },
+      {
+        "id": "mistral:codestral-2405",
+        "platform": "mistral",
+        "model_name": "codestral-2405",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-3-ultra-550b-a55b",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-3-ultra-550b-a55b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-3-120b-a12b",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-3-120b-a12b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-3-nano-30b-a3b",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-3-nano-30b-a3b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:deepseek-ai/deepseek-v4-flash",
+        "platform": "nvidia",
+        "model_name": "deepseek-ai/deepseek-v4-flash",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:deepseek-ai/deepseek-v4-pro",
+        "platform": "nvidia",
+        "model_name": "deepseek-ai/deepseek-v4-pro",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:moonshotai/kimi-k2.6",
+        "platform": "nvidia",
+        "model_name": "moonshotai/kimi-k2.6",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:z-ai/glm-5.2",
+        "platform": "nvidia",
+        "model_name": "z-ai/glm-5.2",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:mistralai/mistral-medium-3.5-128b",
+        "platform": "nvidia",
+        "model_name": "mistralai/mistral-medium-3.5-128b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:qwen/qwen3-next-80b-a3b-instruct",
+        "platform": "nvidia",
+        "model_name": "qwen/qwen3-next-80b-a3b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:01-ai/yi-large",
+        "platform": "nvidia",
+        "model_name": "01-ai/yi-large",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:adept/fuyu-8b",
+        "platform": "nvidia",
+        "model_name": "adept/fuyu-8b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:ai21labs/jamba-1.5-large-instruct",
+        "platform": "nvidia",
+        "model_name": "ai21labs/jamba-1.5-large-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:aisingapore/sea-lion-7b-instruct",
+        "platform": "nvidia",
+        "model_name": "aisingapore/sea-lion-7b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:baai/bge-m3",
+        "platform": "nvidia",
+        "model_name": "baai/bge-m3",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:bigcode/starcoder2-15b",
+        "platform": "nvidia",
+        "model_name": "bigcode/starcoder2-15b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:databricks/dbrx-instruct",
+        "platform": "nvidia",
+        "model_name": "databricks/dbrx-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:deepseek-ai/deepseek-coder-6.7b-instruct",
+        "platform": "nvidia",
+        "model_name": "deepseek-ai/deepseek-coder-6.7b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:google/codegemma-1.1-7b",
+        "platform": "nvidia",
+        "model_name": "google/codegemma-1.1-7b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:google/codegemma-7b",
+        "platform": "nvidia",
+        "model_name": "google/codegemma-7b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:google/deplot",
+        "platform": "nvidia",
+        "model_name": "google/deplot",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:google/diffusiongemma-26b-a4b-it",
+        "platform": "nvidia",
+        "model_name": "google/diffusiongemma-26b-a4b-it",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:google/gemma-2b",
+        "platform": "nvidia",
+        "model_name": "google/gemma-2b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:google/gemma-3-12b-it",
+        "platform": "nvidia",
+        "model_name": "google/gemma-3-12b-it",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:google/gemma-3-4b-it",
+        "platform": "nvidia",
+        "model_name": "google/gemma-3-4b-it",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:google/gemma-4-31b-it",
+        "platform": "nvidia",
+        "model_name": "google/gemma-4-31b-it",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:google/recurrentgemma-2b",
+        "platform": "nvidia",
+        "model_name": "google/recurrentgemma-2b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:ibm/granite-3.0-3b-a800m-instruct",
+        "platform": "nvidia",
+        "model_name": "ibm/granite-3.0-3b-a800m-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:ibm/granite-3.0-8b-instruct",
+        "platform": "nvidia",
+        "model_name": "ibm/granite-3.0-8b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:ibm/granite-34b-code-instruct",
+        "platform": "nvidia",
+        "model_name": "ibm/granite-34b-code-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:ibm/granite-8b-code-instruct",
+        "platform": "nvidia",
+        "model_name": "ibm/granite-8b-code-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:meta/codellama-70b",
+        "platform": "nvidia",
+        "model_name": "meta/codellama-70b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:meta/llama-3.1-70b-instruct",
+        "platform": "nvidia",
+        "model_name": "meta/llama-3.1-70b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:meta/llama-3.1-8b-instruct",
+        "platform": "nvidia",
+        "model_name": "meta/llama-3.1-8b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:meta/llama-3.2-11b-vision-instruct",
+        "platform": "nvidia",
+        "model_name": "meta/llama-3.2-11b-vision-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:meta/llama-3.2-1b-instruct",
+        "platform": "nvidia",
+        "model_name": "meta/llama-3.2-1b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:meta/llama-3.2-3b-instruct",
+        "platform": "nvidia",
+        "model_name": "meta/llama-3.2-3b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:meta/llama-3.2-90b-vision-instruct",
+        "platform": "nvidia",
+        "model_name": "meta/llama-3.2-90b-vision-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:meta/llama-3.3-70b-instruct",
+        "platform": "nvidia",
+        "model_name": "meta/llama-3.3-70b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:meta/llama-guard-4-12b",
+        "platform": "nvidia",
+        "model_name": "meta/llama-guard-4-12b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:meta/llama2-70b",
+        "platform": "nvidia",
+        "model_name": "meta/llama2-70b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:microsoft/kosmos-2",
+        "platform": "nvidia",
+        "model_name": "microsoft/kosmos-2",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:microsoft/phi-3-vision-128k-instruct",
+        "platform": "nvidia",
+        "model_name": "microsoft/phi-3-vision-128k-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:microsoft/phi-3.5-moe-instruct",
+        "platform": "nvidia",
+        "model_name": "microsoft/phi-3.5-moe-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:minimaxai/minimax-m3",
+        "platform": "nvidia",
+        "model_name": "minimaxai/minimax-m3",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:mistralai/codestral-22b-instruct-v0.1",
+        "platform": "nvidia",
+        "model_name": "mistralai/codestral-22b-instruct-v0.1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:mistralai/mistral-7b-instruct-v0.3",
+        "platform": "nvidia",
+        "model_name": "mistralai/mistral-7b-instruct-v0.3",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:mistralai/mistral-large",
+        "platform": "nvidia",
+        "model_name": "mistralai/mistral-large",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:mistralai/mistral-large-2-instruct",
+        "platform": "nvidia",
+        "model_name": "mistralai/mistral-large-2-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:mistralai/mistral-nemotron",
+        "platform": "nvidia",
+        "model_name": "mistralai/mistral-nemotron",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:mistralai/mixtral-8x22b-v0.1",
+        "platform": "nvidia",
+        "model_name": "mistralai/mixtral-8x22b-v0.1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nv-mistralai/mistral-nemo-12b-instruct",
+        "platform": "nvidia",
+        "model_name": "nv-mistralai/mistral-nemo-12b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/ai-synthetic-video-detector",
+        "platform": "nvidia",
+        "model_name": "nvidia/ai-synthetic-video-detector",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/cosmos-reason2-8b",
+        "platform": "nvidia",
+        "model_name": "nvidia/cosmos-reason2-8b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/embed-qa-4",
+        "platform": "nvidia",
+        "model_name": "nvidia/embed-qa-4",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/ising-calibration-1.5-31b",
+        "platform": "nvidia",
+        "model_name": "nvidia/ising-calibration-1.5-31b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.1-nemoguard-8b-content-safety",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.1-nemoguard-8b-content-safety",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.1-nemoguard-8b-topic-control",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.1-nemoguard-8b-topic-control",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.1-nemotron-51b-instruct",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.1-nemotron-51b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.1-nemotron-70b-instruct",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.1-nemotron-70b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.1-nemotron-nano-8b-v1",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.1-nemotron-nano-8b-v1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.1-nemotron-nano-vl-8b-v1",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.1-nemotron-nano-vl-8b-v1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.1-nemotron-safety-guard-8b-v3",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.1-nemotron-ultra-253b-v1",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.2-nemoretriever-1b-vlm-embed-v1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.2-nv-embedqa-1b-v1",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.2-nv-embedqa-1b-v1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.3-nemotron-super-49b-v1",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.3-nemotron-super-49b-v1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-3.3-nemotron-super-49b-v1.5",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-nemotron-embed-1b-v2",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-nemotron-embed-1b-v2",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama-nemotron-embed-vl-1b-v2",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama-nemotron-embed-vl-1b-v2",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/llama3-chatqa-1.5-70b",
+        "platform": "nvidia",
+        "model_name": "nvidia/llama3-chatqa-1.5-70b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/mistral-nemo-minitron-8b-8k-instruct",
+        "platform": "nvidia",
+        "model_name": "nvidia/mistral-nemo-minitron-8b-8k-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemoretriever-parse",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemoretriever-parse",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-3-embed-1b",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-3-embed-1b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-3-super-120b-a12b",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-3-super-120b-a12b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-3.5-content-safety",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-3.5-content-safety",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-4-340b-instruct",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-4-340b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-4-340b-reward",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-4-340b-reward",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-mini-4b-instruct",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-mini-4b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-nano-12b-v2-vl",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-nano-12b-v2-vl",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-nano-3-30b-a3b",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-nano-3-30b-a3b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nemotron-parse",
+        "platform": "nvidia",
+        "model_name": "nvidia/nemotron-parse",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/neva-22b",
+        "platform": "nvidia",
+        "model_name": "nvidia/neva-22b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nv-embed-v1",
+        "platform": "nvidia",
+        "model_name": "nvidia/nv-embed-v1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nv-embedcode-7b-v1",
+        "platform": "nvidia",
+        "model_name": "nvidia/nv-embedcode-7b-v1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nv-embedqa-e5-v5",
+        "platform": "nvidia",
+        "model_name": "nvidia/nv-embedqa-e5-v5",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nv-embedqa-mistral-7b-v2",
+        "platform": "nvidia",
+        "model_name": "nvidia/nv-embedqa-mistral-7b-v2",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nvclip",
+        "platform": "nvidia",
+        "model_name": "nvidia/nvclip",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/nvidia-nemotron-nano-9b-v2",
+        "platform": "nvidia",
+        "model_name": "nvidia/nvidia-nemotron-nano-9b-v2",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/riva-translate-4b-instruct",
+        "platform": "nvidia",
+        "model_name": "nvidia/riva-translate-4b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/riva-translate-4b-instruct-v1.1",
+        "platform": "nvidia",
+        "model_name": "nvidia/riva-translate-4b-instruct-v1.1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/riva-translate-4b-instruct-v2",
+        "platform": "nvidia",
+        "model_name": "nvidia/riva-translate-4b-instruct-v2",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:nvidia/vila",
+        "platform": "nvidia",
+        "model_name": "nvidia/vila",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:openai/gpt-oss-120b",
+        "platform": "nvidia",
+        "model_name": "openai/gpt-oss-120b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:openai/gpt-oss-20b",
+        "platform": "nvidia",
+        "model_name": "openai/gpt-oss-20b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:poolside/laguna-xs-2.1",
+        "platform": "nvidia",
+        "model_name": "poolside/laguna-xs-2.1",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:snowflake/arctic-embed-l",
+        "platform": "nvidia",
+        "model_name": "snowflake/arctic-embed-l",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:stepfun-ai/step-3.7-flash",
+        "platform": "nvidia",
+        "model_name": "stepfun-ai/step-3.7-flash",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:thinkingmachines/inkling",
+        "platform": "nvidia",
+        "model_name": "thinkingmachines/inkling",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:writer/palmyra-creative-122b",
+        "platform": "nvidia",
+        "model_name": "writer/palmyra-creative-122b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:writer/palmyra-fin-70b-32k",
+        "platform": "nvidia",
+        "model_name": "writer/palmyra-fin-70b-32k",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:writer/palmyra-med-70b",
+        "platform": "nvidia",
+        "model_name": "writer/palmyra-med-70b",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:writer/palmyra-med-70b-32k",
+        "platform": "nvidia",
+        "model_name": "writer/palmyra-med-70b-32k",
+        "enabled": 1
+      },
+      {
+        "id": "nvidia:zyphra/zamba2-7b-instruct",
+        "platform": "nvidia",
+        "model_name": "zyphra/zamba2-7b-instruct",
+        "enabled": 1
+      },
+      {
+        "id": "openrouter:qwen/qwen-2.5-72b-instruct:free",
+        "platform": "openrouter",
+        "model_name": "qwen/qwen-2.5-72b-instruct:free",
+        "enabled": 1
+      },
+      {
+        "id": "pollinations:openai-fast",
+        "platform": "pollinations",
+        "model_name": "openai-fast",
+        "enabled": 1
+      },
+      {
+        "id": "pollinations:openai",
+        "platform": "pollinations",
+        "model_name": "openai",
+        "enabled": 1
+      },
+      {
+        "id": "pollinations:openai-large",
+        "platform": "pollinations",
+        "model_name": "openai-large",
+        "enabled": 1
+      },
+      {
+        "id": "pollinations:openai-reasoning",
+        "platform": "pollinations",
+        "model_name": "openai-reasoning",
+        "enabled": 1
+      },
+      {
+        "id": "pollinations:qwen-coder",
+        "platform": "pollinations",
+        "model_name": "qwen-coder",
+        "enabled": 1
+      },
+      {
+        "id": "pollinations:llama",
+        "platform": "pollinations",
+        "model_name": "llama",
+        "enabled": 1
+      },
+      {
+        "id": "pollinations:mistral",
+        "platform": "pollinations",
+        "model_name": "mistral",
+        "enabled": 1
+      },
+      {
+        "id": "pollinations:deepseek",
+        "platform": "pollinations",
+        "model_name": "deepseek",
+        "enabled": 1
+      },
+      {
+        "id": "pollinations:deepseek-reasoning",
+        "platform": "pollinations",
+        "model_name": "deepseek-reasoning",
+        "enabled": 1
+      },
+      {
+        "id": "zai:glm-4.6",
+        "platform": "zai",
+        "model_name": "glm-4.6",
+        "enabled": 1
+      },
+      {
+        "id": "zai:glm-4.5",
+        "platform": "zai",
+        "model_name": "glm-4.5",
+        "enabled": 1
+      },
+      {
+        "id": "zai:glm-4.5-air",
+        "platform": "zai",
+        "model_name": "glm-4.5-air",
+        "enabled": 1
+      },
+      {
+        "id": "zai:glm-4.7",
+        "platform": "zai",
+        "model_name": "glm-4.7",
+        "enabled": 1
+      },
+      {
+        "id": "zai:glm-5",
+        "platform": "zai",
+        "model_name": "glm-5",
+        "enabled": 1
+      },
+      {
+        "id": "zai:glm-5.1",
+        "platform": "zai",
+        "model_name": "glm-5.1",
+        "enabled": 1
+      },
+      {
+        "id": "zai:glm-5.2",
+        "platform": "zai",
+        "model_name": "glm-5.2",
+        "enabled": 1
+      },
+      {
+        "id": "zai:glm-5-turbo",
+        "platform": "zai",
+        "model_name": "glm-5-turbo",
+        "enabled": 1
+      }
+    ],
+    "success": true,
+    "meta": {
+      "served_by": "v3-prod",
+      "served_by_region": "WNAM",
+      "served_by_colo": "DFW",
+      "served_by_primary": true,
+      "timings": {
+        "sql_duration_ms": 1.1721
+      },
+      "duration": 1.1721,
+      "changes": 0,
+      "last_row_id": 0,
+      "changed_db": false,
+      "size_after": 274432,
+      "rows_read": 455,
+      "rows_written": 0,
+      "total_attempts": 1
+    }
+  }
+]

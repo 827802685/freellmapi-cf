@@ -1,0 +1,874 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================================================
+   Galaxy 美化主题系统 — 高度可调色系
+   基于 Uiverse.io/galaxy UI 元素风格,通过 CSS 变量实现全局可调
+   ========================================================================
+   色彩层级:
+   --accent-primary    主强调色(按钮/链接/选中态)
+   --accent-hover      主强调色 hover
+   --accent-glow       主强调色光晕(rgba)
+   --accent-gradient   主强调色渐变
+   --accent-soft       主强调色柔和背景
+   ======================================================================== */
+
+/* ===== 暗色主题(默认) ===== */
+:root,
+.dark {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #12121a;
+  --bg-tertiary: #1a1a24;
+  --bg-elevated: #1e1e2e;
+  --border-subtle: #1f1f2e;
+  --border-strong: #2a2a3d;
+  --text-primary: #e5e5e7;
+  --text-secondary: #a0a0aa;
+  --text-muted: #8b8b96;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+  --on-accent: #ffffff;
+  --selected-text: #0a0a0f;
+  --selected-bg: #e5e5e7;
+  color-scheme: dark;
+
+  /* === Galaxy 增强变量 === */
+  /* 默认强调色: 紫罗兰 */
+  --accent-primary: #7c3aed;
+  --accent-hover: #6d28d9;
+  --accent-glow: rgba(124, 58, 237, 0.4);
+  --accent-glow-strong: rgba(124, 58, 237, 0.6);
+  --accent-soft: rgba(124, 58, 237, 0.12);
+  --accent-gradient: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+
+  /* 玻璃态 */
+  --glass-bg: rgba(18, 18, 26, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-blur: 16px;
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px var(--accent-glow);
+
+  /* 过渡 */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 效果强度(0-1,由主题定制器控制) */
+  --effect-glow: 1;
+  --effect-glass: 1;
+  --effect-gradient: 1;
+}
+
+/* ===== 亮色主题 ===== */
+.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f7;
+  --bg-tertiary: #e8e8ec;
+  --bg-elevated: #ffffff;
+  --border-subtle: #d0d0d8;
+  --border-strong: #a8a8b4;
+  --text-primary: #09090b;
+  --text-secondary: #3f3f46;
+  --text-muted: #52525b;
+  --on-accent: #ffffff;
+  --selected-text: #ffffff;
+  --selected-bg: #18181b;
+  color-scheme: light;
+
+  /* === Galaxy 增强变量 === */
+  --accent-primary: #6d28d9;
+  --accent-hover: #5b21b6;
+  --accent-glow: rgba(109, 40, 217, 0.25);
+  --accent-glow-strong: rgba(109, 40, 217, 0.4);
+  --accent-soft: rgba(109, 40, 217, 0.08);
+  --accent-gradient: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-blur: 16px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-glow: 0 0 20px var(--accent-glow);
+}
+
+/* ===== 色彩预设(通过 data-accent 属性切换) ===== */
+[data-accent="violet"] {
+  --accent-primary: #7c3aed;
+  --accent-hover: #6d28d9;
+  --accent-glow: rgba(124, 58, 237, 0.4);
+  --accent-glow-strong: rgba(124, 58, 237, 0.6);
+  --accent-soft: rgba(124, 58, 237, 0.12);
+  --accent-gradient: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+}
+.light[data-accent="violet"] {
+  --accent-primary: #6d28d9;
+  --accent-hover: #5b21b6;
+  --accent-glow: rgba(109, 40, 217, 0.25);
+  --accent-glow-strong: rgba(109, 40, 217, 0.4);
+  --accent-soft: rgba(109, 40, 217, 0.08);
+  --accent-gradient: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #5b21b6 0%, #7c3aed 100%);
+}
+
+[data-accent="blue"] {
+  --accent-primary: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-glow: rgba(37, 99, 235, 0.4);
+  --accent-glow-strong: rgba(37, 99, 235, 0.6);
+  --accent-soft: rgba(37, 99, 235, 0.12);
+  --accent-gradient: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+}
+.light[data-accent="blue"] {
+  --accent-primary: #1d4ed8;
+  --accent-hover: #1e40af;
+  --accent-glow: rgba(29, 78, 216, 0.25);
+  --accent-glow-strong: rgba(29, 78, 216, 0.4);
+  --accent-soft: rgba(29, 78, 216, 0.08);
+  --accent-gradient: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+}
+
+[data-accent="emerald"] {
+  --accent-primary: #059669;
+  --accent-hover: #047857;
+  --accent-glow: rgba(5, 150, 105, 0.4);
+  --accent-glow-strong: rgba(5, 150, 105, 0.6);
+  --accent-soft: rgba(5, 150, 105, 0.12);
+  --accent-gradient: linear-gradient(135deg, #059669 0%, #34d399 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #047857 0%, #10b981 100%);
+}
+.light[data-accent="emerald"] {
+  --accent-primary: #047857;
+  --accent-hover: #065f46;
+  --accent-glow: rgba(4, 120, 87, 0.25);
+  --accent-glow-strong: rgba(4, 120, 87, 0.4);
+  --accent-soft: rgba(4, 120, 87, 0.08);
+  --accent-gradient: linear-gradient(135deg, #047857 0%, #10b981 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #065f46 0%, #059669 100%);
+}
+
+[data-accent="rose"] {
+  --accent-primary: #e11d48;
+  --accent-hover: #be123c;
+  --accent-glow: rgba(225, 29, 72, 0.4);
+  --accent-glow-strong: rgba(225, 29, 72, 0.6);
+  --accent-soft: rgba(225, 29, 72, 0.12);
+  --accent-gradient: linear-gradient(135deg, #e11d48 0%, #fb7185 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #be123c 0%, #f43f5e 100%);
+}
+.light[data-accent="rose"] {
+  --accent-primary: #be123c;
+  --accent-hover: #9f1239;
+  --accent-glow: rgba(190, 18, 60, 0.25);
+  --accent-glow-strong: rgba(190, 18, 60, 0.4);
+  --accent-soft: rgba(190, 18, 60, 0.08);
+  --accent-gradient: linear-gradient(135deg, #be123c 0%, #f43f5e 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #9f1239 0%, #e11d48 100%);
+}
+
+[data-accent="amber"] {
+  --accent-primary: #d97706;
+  --accent-hover: #b45309;
+  --accent-glow: rgba(217, 119, 6, 0.4);
+  --accent-glow-strong: rgba(217, 119, 6, 0.6);
+  --accent-soft: rgba(217, 119, 6, 0.12);
+  --accent-gradient: linear-gradient(135deg, #d97706 0%, #fbbf24 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #b45309 0%, #f59e0b 100%);
+}
+.light[data-accent="amber"] {
+  --accent-primary: #b45309;
+  --accent-hover: #92400e;
+  --accent-glow: rgba(180, 83, 9, 0.25);
+  --accent-glow-strong: rgba(180, 83, 9, 0.4);
+  --accent-soft: rgba(180, 83, 9, 0.08);
+  --accent-gradient: linear-gradient(135deg, #b45309 0%, #f59e0b 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #92400e 0%, #d97706 100%);
+}
+
+[data-accent="cyan"] {
+  --accent-primary: #0891b2;
+  --accent-hover: #0e7490;
+  --accent-glow: rgba(8, 145, 178, 0.4);
+  --accent-glow-strong: rgba(8, 145, 178, 0.6);
+  --accent-soft: rgba(8, 145, 178, 0.12);
+  --accent-gradient: linear-gradient(135deg, #0891b2 0%, #22d3ee 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #0e7490 0%, #06b6d4 100%);
+}
+.light[data-accent="cyan"] {
+  --accent-primary: #0e7490;
+  --accent-hover: #155e75;
+  --accent-glow: rgba(14, 116, 144, 0.25);
+  --accent-glow-strong: rgba(14, 116, 144, 0.4);
+  --accent-soft: rgba(14, 116, 144, 0.08);
+  --accent-gradient: linear-gradient(135deg, #0e7490 0%, #06b6d4 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #155e75 0%, #0891b2 100%);
+}
+
+[data-accent="pink"] {
+  --accent-primary: #db2777;
+  --accent-hover: #be185d;
+  --accent-glow: rgba(219, 39, 119, 0.4);
+  --accent-glow-strong: rgba(219, 39, 119, 0.6);
+  --accent-soft: rgba(219, 39, 119, 0.12);
+  --accent-gradient: linear-gradient(135deg, #db2777 0%, #f472b6 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #be185d 0%, #ec4899 100%);
+}
+.light[data-accent="pink"] {
+  --accent-primary: #be185d;
+  --accent-hover: #9d174d;
+  --accent-glow: rgba(190, 24, 93, 0.25);
+  --accent-glow-strong: rgba(190, 24, 93, 0.4);
+  --accent-soft: rgba(190, 24, 93, 0.08);
+  --accent-gradient: linear-gradient(135deg, #be185d 0%, #ec4899 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #9d174d 0%, #db2777 100%);
+}
+
+/* ===== 效果强度控制 ===== */
+[data-glow="0"] { --effect-glow: 0; --shadow-glow: none; }
+[data-glow="1"] { --effect-glow: 1; }
+[data-glass="0"] { --effect-glass: 0; --glass-bg: var(--bg-secondary); --glass-blur: 0px; }
+[data-glass="1"] { --effect-glass: 1; }
+[data-gradient="0"] { --effect-gradient: 0; }
+[data-gradient="1"] { --effect-gradient: 1; }
+
+@layer base {
+  body {
+    @apply antialiased;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color var(--transition-base), color var(--transition-base);
+  }
+
+  /* 背景层1: 流动极光 */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background:
+      radial-gradient(ellipse 50% 40% at 20% 30%, var(--accent-glow) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 50% at 80% 70%, var(--accent-glow-strong) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 30% at 50% 50%, var(--accent-soft) 0%, transparent 70%);
+    opacity: calc(0.5 * var(--effect-glow));
+    pointer-events: none;
+    z-index: 0;
+    animation: galaxy-aurora 25s ease-in-out infinite;
+    transition: opacity var(--transition-slow);
+  }
+
+  /* 背景层2: 微妙网格纹理 */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, var(--border-strong) 1px, transparent 1.5px);
+    background-size: 32px 32px;
+    opacity: calc(0.15 * var(--effect-gradient));
+    pointer-events: none;
+    z-index: 0;
+    transition: opacity var(--transition-slow);
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* ===== Galaxy 动态背景特效 ===== */
+
+/* 极光流动动画 */
+@keyframes galaxy-aurora {
+  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  33%      { transform: translate(-3%, 2%) rotate(120deg) scale(1.05); }
+  66%      { transform: translate(2%, -3%) rotate(240deg) scale(0.98); }
+}
+
+/* 浮动光球容器 */
+.galaxy-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 单个光球 */
+.galaxy-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: calc(0.25 * var(--effect-glow));
+  will-change: transform;
+}
+
+.galaxy-orb-1 {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+  top: -5%;
+  left: 5%;
+  animation: galaxy-orb-1 20s ease-in-out infinite;
+}
+.galaxy-orb-2 {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, var(--accent-glow-strong) 0%, transparent 70%);
+  top: 50%;
+  right: -5%;
+  animation: galaxy-orb-2 24s ease-in-out infinite;
+}
+.galaxy-orb-3 {
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, var(--accent-soft) 0%, transparent 70%);
+  bottom: -5%;
+  left: 30%;
+  animation: galaxy-orb-3 28s ease-in-out infinite;
+}
+
+@keyframes galaxy-orb-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(40px, 30px) scale(1.1); }
+  66%      { transform: translate(-30px, 50px) scale(0.95); }
+}
+@keyframes galaxy-orb-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(-50px, -30px) scale(0.9); }
+  66%      { transform: translate(30px, -50px) scale(1.08); }
+}
+@keyframes galaxy-orb-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(30px, -40px) scale(1.05); }
+  66%      { transform: translate(-40px, -20px) scale(0.92); }
+}
+
+/* 亮色主题下降低强度 */
+.light .galaxy-orb {
+  opacity: calc(0.15 * var(--effect-glow));
+}
+.light body::before,
+.light::before {
+  opacity: calc(0.3 * var(--effect-glow));
+}
+
+@layer components {
+  /* ===== Galaxy 按钮 ===== */
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium text-sm transition-all;
+    transition-duration: var(--transition-base);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 主按钮 — 渐变 + 光晕 */
+  .btn-primary {
+    background: var(--accent-gradient);
+    color: var(--on-accent);
+    @apply btn;
+    box-shadow: 0 4px 14px 0 var(--accent-glow);
+    transition: all var(--transition-base);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--accent-gradient-hover);
+    box-shadow: 0 6px 20px 0 var(--accent-glow-strong);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  /* 涟漪效果 */
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  .btn-primary:active::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  /* 次按钮 — 玻璃态边框 */
+  .btn-secondary {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    @apply btn;
+    transition: all var(--transition-base);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    border-color: var(--accent-primary);
+    background-color: var(--accent-soft);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+  .btn-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* 幽灵按钮 — 最小化 */
+  .btn-ghost {
+    color: var(--text-secondary);
+    @apply btn;
+    transition: all var(--transition-fast);
+  }
+  .btn-ghost:hover:not(:disabled) {
+    color: var(--accent-primary);
+    background-color: var(--accent-soft);
+  }
+
+  /* 危险按钮 */
+  .btn-danger {
+    background: linear-gradient(135deg, var(--danger) 0%, #f87171 100%);
+    color: #ffffff;
+    @apply btn;
+    box-shadow: 0 4px 14px 0 rgba(239, 68, 68, 0.3);
+  }
+  .btn-danger:hover:not(:disabled) {
+    box-shadow: 0 6px 20px 0 rgba(239, 68, 68, 0.5);
+    transform: translateY(-1px);
+  }
+
+  /* ===== Galaxy 输入框 ===== */
+  .input {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    @apply w-full px-3 py-2 rounded-lg placeholder-text-muted transition-all;
+    transition-duration: var(--transition-base);
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px var(--accent-glow), 0 0 12px var(--accent-glow);
+    background-color: var(--bg-elevated);
+  }
+  .input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
+  /* ===== Galaxy 卡片 — 玻璃态 ===== */
+  .card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    @apply rounded-xl p-6;
+    box-shadow: var(--shadow-md);
+    transition: border-color var(--transition-base), box-shadow var(--transition-base);
+    position: relative;
+  }
+  .card:hover {
+    border-color: var(--border-strong);
+  }
+
+  /* 增强卡片: 玻璃态背景 */
+  .card-glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    @apply rounded-xl p-6;
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* 渐变边框卡片 */
+  .card-gradient-border {
+    position: relative;
+    background: var(--bg-secondary);
+    @apply rounded-xl p-6;
+  }
+  .card-gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    background: var(--accent-gradient);
+    border-radius: inherit;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: calc(0.5 * var(--effect-gradient));
+    pointer-events: none;
+  }
+
+  /* ===== Galaxy 徽章 ===== */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    transition: all var(--transition-fast);
+  }
+  .badge-muted {
+    @apply badge;
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+  }
+  .badge-healthy {
+    @apply badge;
+    color: var(--success);
+    background-color: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+  .badge-warning {
+    @apply badge;
+    color: var(--warning);
+    background-color: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+  }
+  .badge-danger {
+    @apply badge;
+    color: var(--danger);
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+  }
+  .badge-accent {
+    @apply badge;
+    color: var(--accent-primary);
+    background-color: var(--accent-soft);
+    border: 1px solid var(--accent-glow);
+  }
+
+  /* 选中态胶囊按钮 */
+  .chip-selected {
+    background: var(--accent-gradient);
+    color: var(--on-accent);
+    box-shadow: 0 2px 8px var(--accent-glow);
+  }
+  .chip-default {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+  }
+
+  /* ===== Galaxy 开关 — 精美动画 ===== */
+  .galaxy-toggle {
+    width: 42px;
+    height: 24px;
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: background var(--transition-base);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-subtle);
+  }
+  .galaxy-toggle.on {
+    background: var(--accent-gradient);
+    border-color: transparent;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+  .galaxy-toggle .knob {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ffffff;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform var(--transition-base);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  .galaxy-toggle.on .knob {
+    transform: translateX(18px);
+  }
+
+  /* ===== Galaxy 加载器 ===== */
+  .galaxy-spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--border-subtle);
+    border-top-color: var(--accent-primary);
+    border-radius: 50%;
+    animation: galaxy-spin 0.8s linear infinite;
+  }
+  @keyframes galaxy-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .galaxy-pulse {
+    animation: galaxy-pulse-anim 2s ease-in-out infinite;
+  }
+  @keyframes galaxy-pulse-anim {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* ===== Galaxy 下拉菜单 ===== */
+  .galaxy-dropdown {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-lg);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .galaxy-dropdown-item {
+    transition: all var(--transition-fast);
+    position: relative;
+  }
+  .galaxy-dropdown-item:hover {
+    background-color: var(--accent-soft);
+    color: var(--accent-primary);
+  }
+
+  /* ===== Galaxy 导航标签 ===== */
+  .galaxy-tab {
+    position: relative;
+    transition: color var(--transition-base);
+  }
+  .galaxy-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent-gradient);
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+
+  /* ===== Galaxy 表格 ===== */
+  .galaxy-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .galaxy-table thead th {
+    border-bottom: 1px solid var(--border-subtle);
+    transition: color var(--transition-fast);
+  }
+  .galaxy-table tbody tr {
+    transition: background-color var(--transition-fast);
+  }
+  .galaxy-table tbody tr:hover {
+    background-color: var(--accent-soft);
+  }
+
+  /* ===== 渐变文字 ===== */
+  .gradient-text {
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* ===== 亮色模式专属修正 ===== */
+.light .badge-muted {
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-strong);
+}
+.light .badge-healthy {
+  color: var(--success);
+  background-color: rgba(4, 120, 87, 0.12);
+  border-color: rgba(4, 120, 87, 0.40);
+}
+.light .badge-warning {
+  color: var(--warning);
+  background-color: rgba(180, 83, 9, 0.12);
+  border-color: rgba(180, 83, 9, 0.40);
+}
+.light .badge-danger {
+  color: var(--danger);
+  background-color: rgba(185, 28, 28, 0.10);
+  border-color: rgba(185, 28, 28, 0.40);
+}
+
+/* ===== alert 辅助类 ===== */
+.alert-danger {
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+.light .alert-danger {
+  background-color: rgba(185, 28, 28, 0.1);
+  border: 1px solid rgba(185, 28, 28, 0.3);
+}
+.alert-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.light .alert-warning {
+  background-color: rgba(180, 83, 9, 0.1);
+  border: 1px solid rgba(180, 83, 9, 0.3);
+}
+.alert-info {
+  background-color: var(--accent-soft);
+  border: 1px solid var(--accent-glow);
+}
+
+/* ===== 表单元素 ===== */
+select {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+select:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+optgroup {
+  background-color: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+textarea {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+textarea:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--accent-primary);
+}
+
+.light select { color-scheme: light; }
+.dark select { color-scheme: dark; }
+
+/* 亮色模式文字继承 */
+.light body, .light div, .light span, .light p,
+.light h1, .light h2, .light h3, .light h4, .light h5, .light h6,
+.light li, .light td, .light th, .light label, .light button, .light a {
+  color: inherit;
+}
+
+.light code, .light pre { color: var(--text-primary); }
+.light table { color: var(--text-primary); }
+.light tbody tr { color: var(--text-primary); }
+.light a, .dark a { color: var(--info); }
+
+/* ===== 滚动条美化 ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 4px;
+  transition: background var(--transition-fast);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* ===== 进入动画 ===== */
+@keyframes galaxy-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.galaxy-fade-in {
+  animation: galaxy-fade-in var(--transition-base);
+}
+
+@keyframes galaxy-slide-in {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.galaxy-slide-in {
+  animation: galaxy-slide-in var(--transition-base);
+}
+
+/* ===== 渐变分隔线 ===== */
+.galaxy-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+}
+
+/* ===== Galaxy 图标按钮 ===== */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+.icon-btn:hover:not(:disabled) {
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  background-color: var(--accent-soft);
+  box-shadow: 0 0 8px var(--accent-glow);
+  transform: translateY(-1px);
+}
+.icon-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+.icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* 危险图标按钮(删除) */
+.icon-btn-danger:hover:not(:disabled) {
+  color: var(--danger);
+  border-color: var(--danger);
+  background-color: rgba(239, 68, 68, 0.1);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+
+/* 成功图标按钮(健康/同步) */
+.icon-btn-success:hover:not(:disabled) {
+  color: var(--success);
+  border-color: var(--success);
+  background-color: rgba(16, 185, 129, 0.1);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+}
+
+/* 小尺寸图标按钮 */
+.icon-btn-sm {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+}
