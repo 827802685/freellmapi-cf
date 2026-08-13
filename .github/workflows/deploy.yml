@@ -89,10 +89,16 @@ jobs:
         continue-on-error: true  # secrets 可能已设置,失败不阻断部署
         run: |
           cd workers
-          # 用 echo 方式传值避免交互
-          echo "${{ secrets.ENCRYPTION_KEY }}" | npx wrangler secret put ENCRYPTION_KEY
-          echo "${{ secrets.JWT_SECRET }}" | npx wrangler secret put JWT_SECRET
-          echo "${{ secrets.ADMIN_BOOTSTRAP_CODE }}" | npx wrangler secret put ADMIN_BOOTSTRAP_CODE
+          # 只有 secret 非空时才写入,避免空值覆盖线上已配置的 secret
+          if [ -n "${{ secrets.ENCRYPTION_KEY }}" ]; then
+            echo "${{ secrets.ENCRYPTION_KEY }}" | npx wrangler secret put ENCRYPTION_KEY
+          fi
+          if [ -n "${{ secrets.JWT_SECRET }}" ]; then
+            echo "${{ secrets.JWT_SECRET }}" | npx wrangler secret put JWT_SECRET
+          fi
+          if [ -n "${{ secrets.ADMIN_BOOTSTRAP_CODE }}" ]; then
+            echo "${{ secrets.ADMIN_BOOTSTRAP_CODE }}" | npx wrangler secret put ADMIN_BOOTSTRAP_CODE
+          fi
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
