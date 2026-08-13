@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS api_keys (
   health_status TEXT NOT NULL DEFAULT 'unknown',  -- 'healthy' | 'rate_limited' | 'invalid' | 'error' | 'unknown'
   last_checked_at INTEGER,
   custom_base_url TEXT,                           -- 自定义 OpenAI 兼容端点(custom 平台用)
+  custom_models TEXT,                             -- 自定义模型列表(逗号分隔,custom 平台用)
   created_at INTEGER NOT NULL DEFAULT (unixepoch()),
   updated_at INTEGER NOT NULL DEFAULT (unixepoch())
 );
@@ -103,7 +104,10 @@ CREATE TABLE IF NOT EXISTS user_tokens (
   enabled INTEGER NOT NULL DEFAULT 1,
   created_at INTEGER NOT NULL DEFAULT (unixepoch()),
   last_used_at INTEGER,
-  request_count INTEGER NOT NULL DEFAULT 0
+  request_count INTEGER NOT NULL DEFAULT 0,
+  token_ciphertext TEXT,                -- token 明文加密存储(AES-256-GCM)
+  token_iv TEXT,
+  token_tag TEXT
 );
 
 -- 统一 key 会话（粘性）
