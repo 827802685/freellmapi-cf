@@ -611,72 +611,215 @@ export default {
 };
 
 /**
- * 同步远程模型目录
- * (默认从 freellmapi.co/catalog.json 拉,带签名验证)
+ * 同步远程模型目录 (RSS 源)
+ * 从 RSS 拉取免费模型清单,替换远程模型库(source='remote' 的部分)。
+ *
+ * RSS item 结构:
+ *   <title>modelscope/ZhipuAI/GLM-5.2</title>
+ *   <guid isPermaLink="false">modelscope:ZhipuAI/GLM-5.2</guid>
+ *   <category>对话</category>          (可多个)
+ *   <description>厂商: X | Base URL: ... | 分类: A, B | 上下文: 128,000 | 能力: chat, vision | 限速: ...</description>
+ *
+ * 平台兼容: opencodezen → opencode, zhipu → zai (两端 Base URL 相同,复用已有平台)
+ * 分类兼容: 将 RSS 分类标签(对话/代码/视觉理解/...)存入 models.categories 字段
+ * RSS URL 可通过 settings 表 catalog_url 覆盖(默认 https://rss.zjkl.dpdns.org/rss.xml)
+ */
+const RSS_DEFAULT_URL = 'https://rss.zjkl.dpdns.org/rss.xml';
+
+/** RSS 平台 → 系统平台 映射(相同 Base URL 的厂商合并到已有平台) */
+const RSS_PLATFORM_MAP: Record<string, string> = {
+  opencodezen: 'opencode', // https://opencode.ai/zen/v1
+  zhipu: 'zai',            // https://open.bigmodel.cn/api/paas/v4
+};
+
+interface RssModel {
+  id: string;
+  platform: string;
+  model_name: string;
+  display_name: string;
+  categories: string[];
+  context_window: number | null;
+  supports_vision: number;
+  supports_tools: number;
+  free_tier_rpm: number | null;
+  free_tier_rpd: number | null;
+}
+
+/** 从 XML 中提取第一个 <tag ...>value</tag> (支持 tag 属性) */
+function extractXmlField(xml: string, tag: string): string {
+  const m = xml.match(new RegExp(`<${tag}[^>]*>([^<]*)</${tag}>`));
+  return m ? m[1].trim() : '';
+}
+
+/** 解析 description 里的 "key: value | key: value" 字段 */
+function parseDescription(desc: string): Record<string, string> {
+  const fields: Record<string, string> = {};
+  for (const seg of desc.split('|')) {
+    const idx = seg.indexOf(':');
+    if (idx > 0) {
+      const key = seg.slice(0, idx).trim();
+      const val = seg.slice(idx + 1).trim();
+      fields[key] = val;
+    }
+  }
+  return fields;
+}
+
+/** 解析 RSS XML,提取模型元数据 */
+function parseRssModels(xml: string): RssModel[] {
+  const out: RssModel[] = [];
+  const itemRe = /<item>([\s\S]*?)<\/item>/g;
+  let m: RegExpExecArray | null;
+  while ((m = itemRe.exec(xml)) !== null) {
+    const item = m[1];
+    const title = extractXmlField(item, 'title');
+    const guid = extractXmlField(item, 'guid');
+    const rawId = guid || title;
+    if (!rawId) continue;
+
+    // 平台 + 模型名: guid 为 "platform:model", title 为 "platform/model"
+    let platformRaw = '';
+    let modelName = '';
+    const colon = rawId.indexOf(':');
+    if (colon > 0) {
+      platformRaw = rawId.slice(0, colon);
+      modelName = rawId.slice(colon + 1);
+    } else {
+      const slash = rawId.indexOf('/');
+      if (slash > 0) {
+        platformRaw = rawId.slice(0, slash);
+        modelName = rawId.slice(slash + 1);
+      } else {
+        continue;
+      }
+    }
+    if (!modelName) continue;
+    const platform = RSS_PLATFORM_MAP[platformRaw] || platformRaw;
+
+    // 分类: 优先 <category> 标签,回退到 description 里的 "分类"
+    let categories: string[] = [];
+    const catRe = /<category>([^<]*)<\/category>/g;
+    let cm: RegExpExecArray | null;
+    while ((cm = catRe.exec(item)) !== null) {
+      const c = cm[1].trim();
+      if (c) categories.push(c);
+    }
+    const fields = parseDescription(extractXmlField(item, 'description'));
+    if (categories.length === 0 && fields['分类']) {
+      categories = fields['分类'].split(/[,，]/).map(s => s.trim()).filter(Boolean);
+    }
+    categories = [...new Set(categories)];
+
+    // 上下文窗口
+    let contextWindow: number | null = null;
+    if (fields['上下文'] && !fields['上下文'].includes('未知')) {
+      const num = fields['上下文'].replace(/,/g, '').match(/\d+/);
+      contextWindow = num ? parseInt(num[0], 10) : null;
+    }
+
+    // 能力(chat / vision / tool / image / video)
+    const caps = (fields['能力'] || '').toLowerCase();
+    const supportsVision = caps.includes('vision') ? 1 : 0;
+    const supportsTools = caps.includes('tool') ? 1 : 0;
+
+    // 限速: "200 req/day per model" / "15 req/min (tier 1)"
+    const limit = fields['限速'] || '';
+    let rpm: number | null = null;
+    let rpd: number | null = null;
+    const rpmMatch = limit.match(/(\d+)\s*(?:req|rpm)?\s*\/\s*min/i);
+    if (rpmMatch) rpm = parseInt(rpmMatch[1], 10);
+    const rpdMatch = limit.match(/(\d+)\s*(?:req|rpm)?\s*\/\s*day/i);
+    if (rpdMatch) rpd = parseInt(rpdMatch[1], 10);
+
+    out.push({
+      id: `${platform}:${modelName}`,
+      platform,
+      model_name: modelName,
+      display_name: modelName,
+      categories,
+      context_window: contextWindow,
+      supports_vision: supportsVision,
+      supports_tools: supportsTools,
+      free_tier_rpm: rpm,
+      free_tier_rpd: rpd,
+    });
+  }
+  return out;
+}
+
+/**
+ * 同步远程模型目录 (RSS 源)
+ * (默认从 RSS 源拉,可通过 settings.catalog_url 覆盖)
  */
 async function syncCatalog(env: Env): Promise<void> {
   try {
-    const url = 'https://freellmapi.co/catalog.json';
-    const res = await fetch(url);
+    const urlRaw = await getSetting(env.DB, 'catalog_url', RSS_DEFAULT_URL);
+    const url = urlRaw || RSS_DEFAULT_URL;
+    const res = await fetch(url, { headers: { 'User-Agent': 'freellmapi-cf rss-sync' } });
     if (!res.ok) {
-      console.error(`[CRON] Catalog fetch failed: ${res.status}`);
+      console.error(`[CRON] RSS catalog fetch failed: ${res.status}`);
       return;
     }
-    const catalog = await res.json() as {
-      models: Array<{
-        id: string;
-        platform: string;
-        model_name: string;
-        display_name?: string;
-        family?: string;
-        context_window?: number;
-        supports_tools?: boolean;
-        supports_vision?: boolean;
-        free_tier_rpm?: number;
-        free_tier_rpd?: number;
-        free_tier_tpm?: number;
-        free_tier_tpd?: number;
-      }>;
-      signature?: string;
-    };
+    const xml = await res.text();
+    const models = parseRssModels(xml);
+    if (models.length === 0) {
+      console.error('[CRON] RSS catalog parsed 0 models, skip sync');
+      return;
+    }
 
-    // 简化:不验证签名(可选)
+    // 入库(upsert,不覆盖用户手动 enabled=0 的选择)
+    // 能力: RSS 的"能力"字段 + 名称启发式检测取并集(保证路由时 vision/tool 标记可用)
     let updated = 0;
-    for (const m of catalog.models || []) {
+    const syncedIds = new Set<string>();
+    for (const m of models) {
+      syncedIds.add(m.id);
+      const supportsVision = m.supports_vision || detectVisionSupport(m.model_name);
+      const supportsTools = m.supports_tools || detectToolSupport(m.model_name);
       await env.DB.prepare(`
-        INSERT INTO models (id, platform, model_name, display_name, family, context_window, supports_tools, supports_vision, free_tier_rpm, free_tier_rpd, free_tier_tpm, free_tier_tpd, source, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'remote', unixepoch())
+        INSERT INTO models (id, platform, model_name, display_name, context_window, supports_tools, supports_vision, free_tier_rpm, free_tier_rpd, categories, source, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'remote', unixepoch())
         ON CONFLICT(id) DO UPDATE SET
           display_name = excluded.display_name,
-          family = excluded.family,
           context_window = excluded.context_window,
           supports_tools = excluded.supports_tools,
           supports_vision = excluded.supports_vision,
           free_tier_rpm = excluded.free_tier_rpm,
           free_tier_rpd = excluded.free_tier_rpd,
-          free_tier_tpm = excluded.free_tier_tpm,
-          free_tier_tpd = excluded.free_tier_tpd,
+          categories = excluded.categories,
           source = 'remote',
           updated_at = unixepoch()
       `).bind(
         m.id,
         m.platform,
         m.model_name,
-        m.display_name || null,
-        m.family || null,
-        m.context_window || null,
-        m.supports_tools ? 1 : 0,
-        m.supports_vision ? 1 : 0,
-        m.free_tier_rpm || null,
-        m.free_tier_rpd || null,
-        m.free_tier_tpm || null,
-        m.free_tier_tpd || null
+        m.display_name,
+        m.context_window,
+        supportsTools,
+        supportsVision,
+        m.free_tier_rpm,
+        m.free_tier_rpd,
+        m.categories.join(',')
       ).run();
       updated++;
     }
-    console.log(`[CRON] Catalog synced: ${updated} models`);
+
+    // 替换:禁用 RSS 中已不存在的旧远程模型(保留 local / auto / custom)
+    const stale = await env.DB.prepare(
+      "SELECT id FROM models WHERE source = 'remote' AND enabled = 1"
+    ).all<{ id: string }>();
+    let disabled = 0;
+    for (const r of stale.results || []) {
+      if (!syncedIds.has(r.id)) {
+        await env.DB.prepare(
+          'UPDATE models SET enabled = 0, updated_at = unixepoch() WHERE id = ?'
+        ).bind(r.id).run();
+        disabled++;
+      }
+    }
+
+    console.log(`[CRON] RSS catalog synced: ${updated} models, disabled ${disabled} stale remote models`);
   } catch (e: unknown) {
-    console.error(`[CRON] Catalog sync error: ${extractErrorMessage(e)}`);
+    console.error(`[CRON] RSS catalog sync error: ${extractErrorMessage(e)}`);
   }
 }
 

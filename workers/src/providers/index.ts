@@ -22,6 +22,8 @@ import { AihordeProvider } from './aihorde';
 import { OpencodeProvider } from './opencode';
 import { KiloProvider } from './kilo';
 import { BailianProvider } from './bailian';
+import { ModelscopeProvider } from './modelscope';
+import { AgnesProvider } from './agnes';
 import { CustomProvider } from './custom';
 
 export function getProvider(platform: Platform, customBaseUrl?: string): BaseProvider {
@@ -44,6 +46,8 @@ export function getProvider(platform: Platform, customBaseUrl?: string): BasePro
     case 'opencode': return new OpencodeProvider();
     case 'kilo': return new KiloProvider();
     case 'bailian': return new BailianProvider();
+    case 'modelscope': return new ModelscopeProvider();
+    case 'agnes': return new AgnesProvider();
     case 'custom':
       if (!customBaseUrl) throw new Error('Custom provider requires baseUrl');
       return new CustomProvider(customBaseUrl);
@@ -58,6 +62,7 @@ export const ALL_PLATFORMS: Platform[] = [
   'cohere', 'zai', 'nvidia', 'huggingface',
   'ollama', 'kilo', 'pollinations', 'llm7',
   'ovh', 'aihorde', 'bailian', 'custom',
+  'modelscope', 'agnes',
 ];
 
 export const PLATFORM_LABELS: Record<Platform, string> = {
@@ -79,5 +84,7 @@ export const PLATFORM_LABELS: Record<Platform, string> = {
   ovh: 'OVH AI Endpoints',
   aihorde: 'AI Horde',
   bailian: '阿里云百炼',
+  modelscope: 'ModelScope (魔搭)',
+  agnes: 'AGNES',
   custom: 'Custom',
 };

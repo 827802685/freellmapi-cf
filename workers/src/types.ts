@@ -32,7 +32,8 @@ export type Platform =
   | 'mistral' | 'openrouter' | 'cloudflare'
   | 'cohere' | 'zai' | 'nvidia' | 'huggingface'
   | 'ollama' | 'kilo' | 'pollinations' | 'llm7'
-  | 'ovh' | 'aihorde' | 'bailian' | 'custom';
+  | 'ovh' | 'aihorde' | 'bailian' | 'custom'
+  | 'modelscope' | 'agnes';
 
 export type HealthStatus = 'healthy' | 'rate_limited' | 'invalid' | 'error' | 'unknown';
 

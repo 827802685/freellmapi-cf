@@ -62,6 +62,7 @@ CREATE TABLE IF NOT EXISTS models (
   free_tier_rpd INTEGER,                -- 每天请求限制
   free_tier_tpm INTEGER,                -- 每分钟 token
   free_tier_tpd INTEGER,                -- 每天 token
+  categories TEXT,                      -- 分类标签(逗号分隔,来自 RSS,如 '对话,视觉理解')
   enabled INTEGER NOT NULL DEFAULT 1,
   source TEXT NOT NULL DEFAULT 'local', -- 'local' | 'remote' | 'auto' | 'custom'
   health_status TEXT NOT NULL DEFAULT 'healthy', -- 'healthy' | 'rate_limited' | 'error'
@@ -172,7 +173,7 @@ CREATE TABLE IF NOT EXISTS settings (
 -- 默认设置
 INSERT OR IGNORE INTO settings (key, value) VALUES
   ('context_handoff_enabled', 'false'),
-  ('catalog_url', 'https://freellmapi.co/catalog.json'),
+  ('catalog_url', 'https://rss.zjkl.dpdns.org/rss.xml'),
   ('analytics_retention_days', '90'),
   ('analytics_max_rows', '100000'),
   ('first_run_completed', 'false');

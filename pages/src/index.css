@@ -552,6 +552,13 @@
     background-color: var(--accent-soft);
     border: 1px solid var(--accent-glow);
   }
+  .badge-cat {
+    @apply badge;
+    color: var(--text-secondary);
+    background-color: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    font-size: 0.65rem;
+  }
 
   /* 选中态胶囊按钮 */
   .chip-selected {

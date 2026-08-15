@@ -81,6 +81,7 @@ jobs:
         run: |
           cd workers
           npx wrangler d1 execute freellmapi --file=./schema.sql --remote
+          npx wrangler d1 execute freellmapi --file=./migration-v4.sql --remote
           npx wrangler d1 execute freellmapi --file=./seed-models.sql --remote
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}

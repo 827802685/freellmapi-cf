@@ -14,6 +14,7 @@ interface ModelInfo {
   activeKeys: number;
   supportsTools: boolean;
   supportsVision: boolean;
+  categories?: string[];
   freeTier: { rpm: number | null; rpd: number | null; tpm: number | null; tpd: number | null };
   healthStatus?: string;
   source?: string;
@@ -67,7 +68,8 @@ export function ModelsPage() {
   const filtered = models.filter(m => {
     if (search) {
       const q = search.toLowerCase();
-      if (!m.name.toLowerCase().includes(q) && !m.platform.toLowerCase().includes(q)) return false;
+      const cats = (m.categories || []).join(' ').toLowerCase();
+      if (!m.name.toLowerCase().includes(q) && !m.platform.toLowerCase().includes(q) && !cats.includes(q)) return false;
     }
     return true;
   });
@@ -157,6 +159,7 @@ export function ModelsPage() {
               <tr className="border-b border-border-subtle text-xs text-text-muted uppercase">
                 <th className="text-left py-2 px-4 font-medium">{t('models.col.model')}</th>
                 <th className="text-left py-2 px-4 font-medium">{t('models.col.platform')}</th>
+                <th className="text-left py-2 px-4 font-medium">{t('models.col.categories')}</th>
                 <th className="text-left py-2 px-4 font-medium">{t('models.col.context')}</th>
                 <th className="text-left py-2 px-4 font-medium">{t('models.col.rpm')}</th>
                 <th className="text-left py-2 px-4 font-medium">{t('models.col.reliability')}</th>
@@ -181,6 +184,13 @@ export function ModelsPage() {
                       {!haveKey && !isRateLimited && <span className="ml-2 text-xs text-text-muted">({t('models.empty')})</span>}
                     </td>
                     <td className="py-2 px-4"><span className="badge-muted">{m.platform}</span></td>
+                    <td className="py-2 px-4">
+                      <div className="flex gap-1 flex-wrap">
+                        {(m.categories || []).map(c => (
+                          <span key={c} className="badge-cat">{c}</span>
+                        ))}
+                      </div>
+                    </td>
                     <td className="py-2 px-4 text-text-secondary text-xs">
                       {m.context ? m.context.toLocaleString() : '-'}
                     </td>
@@ -238,6 +248,7 @@ function modelScore(m: ModelInfo): { reliability: number; speed: number; intelli
     cohere: 65, zai: 55, huggingface: 50, ollama: 40,
     kilo: 65, pollinations: 55, llm7: 60, ovh: 50,
     aihorde: 35, opencode: 70, bailian: 65, custom: 50,
+    modelscope: 65, agnes: 60,
   };
   let speed = platformSpeed[platform] ?? 55;
   // Flash/Lite 模型更快
@@ -251,6 +262,7 @@ function modelScore(m: ModelInfo): { reliability: number; speed: number; intelli
     cerebras: 70, zai: 68, huggingface: 55, ollama: 60,
     kilo: 65, pollinations: 50, llm7: 55, ovh: 52,
     aihorde: 40, opencode: 65, bailian: 70, custom: 60,
+    modelscope: 68, agnes: 60,
   };
   let reliability = platformReliability[platform] ?? 60;
   if (m.healthStatus === 'rate_limited') reliability = Math.min(reliability, 25);
@@ -307,6 +319,8 @@ const PLATFORM_COLORS: Record<string, string> = {
   ovh: '#1230ff',
   aihorde: '#a29bfe',
   opencode: '#00b894',
+  modelscope: '#ff6a00',
+  agnes: '#e84393',
   custom: '#6366f1',
 };
 
@@ -446,6 +460,7 @@ function platformLabel(p: string): string {
     cohere: 'Cohere', openrouter: 'OpenRouter', huggingface: 'HuggingFace',
     bailian: '阿里云百炼', ollama: 'Ollama', kilo: 'Kilo', pollinations: 'Pollinations',
     llm7: 'LLM7', ovh: 'OVH', aihorde: 'AI Horde', opencode: 'OpenCode', custom: 'Custom',
+    modelscope: 'ModelScope', agnes: 'AGNES',
   };
   return labels[p] || p;
 }

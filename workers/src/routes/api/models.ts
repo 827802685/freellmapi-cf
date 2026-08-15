@@ -32,6 +32,8 @@ const PLATFORM_MONTHLY_QUOTA: Record<string, number> = {
   aihorde: 0,
   bailian: 3_000_000,      // 百炼免费层: 每模型约 100万 tokens 限额
   opencode: 0,
+  modelscope: 200_000,     // ModelScope 免费层(按请求限,估算)
+  agnes: 100_000,          // AGNES 免费层(按请求限,估算)
   custom: 0,
 };
 
@@ -93,6 +95,7 @@ modelsRoute.get('/', async (c) => {
     displayName: m.display_name,
     platform: m.platform,
     family: m.family,
+    categories: (m.categories as string || '').split(',').map((s: string) => s.trim()).filter(Boolean),
     context: m.context_window,
     enabled: m.enabled === 1,
     supportsTools: m.supports_tools === 1,
